@@ -1,4 +1,4 @@
-package engine.grille;
+package engine.grid;
 
 import engine.util.Pair;
 

@@ -13,17 +13,17 @@ import org.newdawn.slick.KeyListener;
 import org.newdawn.slick.MouseListener;
 import org.newdawn.slick.SlickException;
 
-import engine.cellule.Cell;
-import engine.cellule.adjacence.Adjacency;
-import engine.cellule.transition.Transition;
-import engine.grille.Coord;
-import engine.grille.Grid;
+import engine.cell.Cell;
+import engine.cell.adjacency.Adjacency;
+import engine.cell.transition.Transition;
+import engine.grid.Coord;
+import engine.grid.Grid;
 import renderer.Camera;
 import renderer.Renderer;
 
 public class Game extends BasicGame {
 
-	public static final int TICK_LENGTH = 1000;
+	public static final int TICK_LENGTH = 100;
 
 	private static Game singleton;
 	private GameContainer container;
@@ -33,6 +33,7 @@ public class Game extends BasicGame {
 
 	private List<Cell> toUpdate;
 	private Set<Cell> nextToUpdate;
+	private List<Cell> cleanUp;
 
 	private Grid grid;
 
@@ -68,6 +69,7 @@ public class Game extends BasicGame {
 
 		this.toUpdate = new ArrayList<Cell>();
 		this.nextToUpdate = new HashSet<Cell>();
+		this.cleanUp = new ArrayList<Cell>();
 
 		container.getInput().addMouseListener(new MouseListener() {
 
@@ -243,16 +245,31 @@ public class Game extends BasicGame {
 			cell.postUpdate();
 		}
 
+		cleanLists();
+	}
+
+	private void cleanLists() {
+		for (int i = 0; i < this.cleanUp.size(); i++) {
+			Cell cell = this.cleanUp.get(i);
+			
+			if (cell.isFullyQuiescent()) {
+				this.grid.remove(cell);
+				this.cleanUp.remove(cell);
+				this.nextToUpdate.remove(cell);
+				i--;
+			}
+		}
+		
 		this.toUpdate.clear();
 		this.toUpdate.addAll(this.nextToUpdate);
 		this.nextToUpdate.clear();
 	}
 
-	public void addToUpdate(Cell cellule) {
-		this.nextToUpdate.add(cellule);
+	public void addToUpdate(Cell toUpdate) {
+		this.nextToUpdate.add(toUpdate);
 		
 		for (Coord adj : Adjacency.getAdjacency()) {
-			Coord relativeCoord = cellule.getCoord().plus(adj.reverse());
+			Coord relativeCoord = toUpdate.getCoord().plus(adj.reverse());
 			Cell cell = Game.getGame().getGrid().getCell(relativeCoord);
 			
 			if (cell == null) {
@@ -260,5 +277,33 @@ public class Game extends BasicGame {
 				Game.getGame().getGrid().add(cell);
 			}
 		}
+	}
+
+	public void addToUpdateUrgently(Cell cell) {
+		if (!this.toUpdate.contains(cell)) {
+			this.toUpdate.add(cell);
+		}
+		
+		for (Coord adj : Adjacency.getAdjacency()) {
+			Coord relativeCoord = cell.getCoord().plus(adj.reverse());
+			Cell adjacentCell = Game.getGame().getGrid().getCell(relativeCoord);
+			
+			if (adjacentCell == null) {
+				cell = new Cell(relativeCoord);
+				Game.getGame().getGrid().add(cell);
+			}
+			
+			this.toUpdate.add(adjacentCell);
+		}
+	}
+
+	public void addToCleanUp(Cell cell) {
+		if (!this.cleanUp.contains(cell)) {
+			this.cleanUp.add(cell);
+		}
+	}
+
+	public void removeFromCleanUp(Cell cell) {
+		this.cleanUp.remove(cell);
 	}
 }

@@ -1,13 +1,13 @@
-package engine.cellule.transition;
+package engine.cell.transition;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import engine.Game;
-import engine.cellule.Cell;
-import engine.cellule.adjacence.AdjacencyByEnumeration;
-import engine.grille.Coord;
-import engine.grille.Grid;
+import engine.cell.Cell;
+import engine.cell.adjacency.AdjacencyByEnumeration;
+import engine.grid.Coord;
+import engine.grid.Grid;
 
 public abstract class Transition {
 

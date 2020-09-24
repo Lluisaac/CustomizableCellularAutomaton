@@ -2,7 +2,7 @@ package renderer;
 
 import org.newdawn.slick.Graphics;
 
-import engine.cellule.Cell;
+import engine.cell.Cell;
 import engine.util.Pair;
 
 public class Camera {

@@ -1,11 +1,11 @@
-package engine.grille;
+package engine.grid;
 
 import java.util.ArrayList;
 
 import org.newdawn.slick.SlickException;
 
 import engine.Game;
-import engine.cellule.Cell;
+import engine.cell.Cell;
 import engine.util.Pair;
 
 public class Grid extends ArrayList<Cell> {

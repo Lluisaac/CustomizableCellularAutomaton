@@ -5,8 +5,8 @@ import java.util.List;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
-import engine.cellule.Cell;
-import engine.grille.Grid;
+import engine.cell.Cell;
+import engine.grid.Grid;
 
 public class Renderer {
 

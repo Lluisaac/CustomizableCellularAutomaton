@@ -1,4 +1,4 @@
-package engine.cellule.adjacence;
+package engine.cell.adjacency;
 
 import java.util.ArrayList;
 import java.util.List;

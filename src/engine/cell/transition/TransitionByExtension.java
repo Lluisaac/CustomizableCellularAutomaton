@@ -1,10 +1,10 @@
-package engine.cellule.transition;
+package engine.cell.transition;
 
 import java.util.Map.Entry;
 
-import engine.cellule.adjacence.AdjacencyByExtension;
-import engine.grille.Coord;
-import engine.grille.Grid;
+import engine.cell.adjacency.AdjacencyByExtension;
+import engine.grid.Coord;
+import engine.grid.Grid;
 
 public class TransitionByExtension extends Transition {
 

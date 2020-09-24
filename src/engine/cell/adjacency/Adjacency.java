@@ -1,9 +1,9 @@
-package engine.cellule.adjacence;
+package engine.cell.adjacency;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import engine.grille.Coord;
+import engine.grid.Coord;
 
 public abstract class Adjacency {
 	

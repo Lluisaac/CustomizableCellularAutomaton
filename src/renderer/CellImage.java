@@ -4,7 +4,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import engine.cellule.Cell;
+import engine.cell.Cell;
 
 public class CellImage extends Image {
 

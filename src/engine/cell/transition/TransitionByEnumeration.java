@@ -1,12 +1,13 @@
-package engine.cellule.transition;
+package engine.cell.transition;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import engine.cellule.adjacence.Adjacency;
-import engine.cellule.adjacence.AdjacencyByEnumeration;
-import engine.grille.Coord;
-import engine.grille.Grid;
+import engine.cell.Cell;
+import engine.cell.adjacency.Adjacency;
+import engine.cell.adjacency.AdjacencyByEnumeration;
+import engine.grid.Coord;
+import engine.grid.Grid;
 import engine.util.Pair;
 
 public class TransitionByEnumeration extends Transition {
@@ -40,7 +41,13 @@ public class TransitionByEnumeration extends Transition {
 
 		for (Coord adj : Adjacency.getAdjacency()) {
 			Coord relativeCoord = coord.plus(adj);
-			addValue(values, grid.getCell(relativeCoord).getState());
+			Cell cell = grid.getCell(relativeCoord);
+			
+			if (cell == null) {
+				addValue(values, 0);
+			} else {
+				addValue(values, cell.getState());
+			}
 		}
 
 		return values;

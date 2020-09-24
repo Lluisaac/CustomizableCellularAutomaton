@@ -1,4 +1,4 @@
-package engine.cellule;
+package engine.cell;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,9 +8,9 @@ import org.newdawn.slick.SlickException;
 
 import engine.Element;
 import engine.Game;
-import engine.cellule.adjacence.Adjacency;
-import engine.cellule.transition.Transition;
-import engine.grille.Coord;
+import engine.cell.adjacency.Adjacency;
+import engine.cell.transition.Transition;
+import engine.grid.Coord;
 import renderer.CellImage;
 
 public class Cell extends Element {
@@ -27,14 +27,12 @@ public class Cell extends Element {
 	public Cell(Coord coord) {
 		this.coord = coord;
 
-		this.state = 0;
-		this.nextState = 0;
+		this.setState(0);
 	}
 
 	public static void init() throws SlickException {
 		Cell.stateImagesList = new ArrayList<Image>();
-
-		Cell.stateImagesList.add(new CellImage(0, 0, 0));
+		Cell.stateImagesList.add(new CellImage(25, 25, 25));
 		Cell.stateImagesList.add(new CellImage(255, 255, 255));
 	}
 
@@ -55,15 +53,17 @@ public class Cell extends Element {
 
 	@Override
 	public void click() {
-		if (this.state == 0) {
-			this.setState(1);
-		} else {
+		if (this.state == Cell.stateImagesList.size() - 1) {
 			this.setState(0);
+		} else {
+			this.setState(this.state + 1);
 		}
+		
+		Game.getGame().addToUpdateUrgently(this);
 	}
 
 	public int getState() {
-		return state;
+		return this.state;
 	}
 
 	public void setState(int state) {
@@ -74,11 +74,17 @@ public class Cell extends Element {
 			Game.getGame().addToUpdate(this);
 
 			for (Coord adj : Adjacency.getAdjacency()) {
-				Coord relativeCoord = coord.plus(adj.reverse());
+				Coord relativeCoord = this.coord.plus(adj.reverse());
 				Cell cell = Game.getGame().getGrid().getCell(relativeCoord);
-					
+
 				Game.getGame().addToUpdate(cell);
 			}
+		}
+
+		if (this.state == 0) {
+			Game.getGame().addToCleanUp(this);
+		} else {
+			Game.getGame().removeFromCleanUp(this);
 		}
 	}
 
@@ -92,6 +98,22 @@ public class Cell extends Element {
 
 	public Coord getCoord() {
 		return this.coord;
+	}
+
+	public boolean isFullyQuiescent() {
+		if (this.state == 0) {
+			for (Coord adj : Adjacency.getAdjacency()) {
+				Coord relativeCoord = this.coord.plus(adj);
+				Cell cell = Game.getGame().getGrid().getCell(relativeCoord);
+
+				if (cell != null && cell.getState() != 0) {
+					return false;
+				}
+			}
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

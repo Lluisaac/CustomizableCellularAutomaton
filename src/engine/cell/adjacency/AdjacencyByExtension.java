@@ -1,11 +1,11 @@
-package engine.cellule.adjacence;
+package engine.cell.adjacency;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
-import engine.grille.Coord;
+import engine.grid.Coord;
 
 public class AdjacencyByExtension extends Adjacency {
 
