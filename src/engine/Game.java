@@ -23,7 +23,7 @@ import renderer.Renderer;
 
 public class Game extends BasicGame {
 
-	public static final int TICK_LENGTH = 100;
+	private static final int TICK_LENGTH = 1000;
 
 	private static Game singleton;
 	private GameContainer container;
@@ -39,6 +39,8 @@ public class Game extends BasicGame {
 
 	private boolean isPaused;
 
+	private int speedNotch;
+
 	public Game() {
 		super("Customizable Cellular Automaton");
 
@@ -47,6 +49,8 @@ public class Game extends BasicGame {
 		this.grid = new Grid();
 
 		this.isPaused = true;
+
+		this.speedNotch = 1;
 	}
 
 	public static Game getGame() {
@@ -64,7 +68,7 @@ public class Game extends BasicGame {
 		Transition.init();
 
 		this.container = container;
-		
+
 		this.renderer = new Renderer();
 
 		this.toUpdate = new ArrayList<Cell>();
@@ -103,7 +107,7 @@ public class Game extends BasicGame {
 			public void mouseReleased(int button, int x, int y) {
 				if (button == Input.MOUSE_LEFT_BUTTON) {
 					try {
-						grid.click(x, y);
+						click(x, y);
 					} catch (SlickException e) {
 						e.printStackTrace();
 					}
@@ -151,9 +155,6 @@ public class Game extends BasicGame {
 				Camera cam = renderer.getCamera();
 
 				switch (key) {
-				case Input.KEY_P:
-					isPaused = !isPaused;
-					break;
 				case Input.KEY_W:
 				case Input.KEY_UP:
 					cam.stopMovingUp();
@@ -197,6 +198,15 @@ public class Game extends BasicGame {
 				case Input.KEY_C:
 					cam.center();
 					break;
+				case Input.KEY_P:
+					pause();
+					break;
+				case Input.KEY_ADD:
+					speedUp();
+					break;
+				case Input.KEY_SUBTRACT:
+					speedDown();
+					break;
 				case Input.KEY_ESCAPE:
 					Game.getGame().exit();
 					break;
@@ -204,7 +214,47 @@ public class Game extends BasicGame {
 			}
 		});
 	}
-	
+
+	protected void click(int x, int y) throws SlickException {
+		List<Element> possible = new ArrayList<Element>();
+		for (Element element : this.renderer.getMenu().getElements()) {
+			if (element.containsCoordinates(x, y)) {
+				possible.add(element);
+			}
+		}
+
+		if (possible.size() > 0) {
+			possible.get(possible.size() - 1).click();
+		} else {
+			this.grid.click(x, y);
+		}
+	}
+
+	public void pause() {
+		this.isPaused = !this.isPaused;
+
+		if (!this.isPaused && this.speedNotch == 0) {
+			this.speedNotch++;
+		}
+	}
+
+	public void speedUp() {
+		this.speedNotch++;
+
+		if (this.speedNotch > 4) {
+			this.speedNotch = 4;
+		}
+	}
+
+	public void speedDown() {
+		this.speedNotch--;
+
+		if (!this.isPaused && this.speedNotch <= 0) {
+			this.isPaused = true;
+			this.speedNotch = 0;
+		}
+	}
+
 	public void exit() {
 		this.container.exit();
 	}
@@ -212,9 +262,17 @@ public class Game extends BasicGame {
 	public Grid getGrid() {
 		return this.grid;
 	}
-	
+
 	public Renderer getRenderer() {
 		return this.renderer;
+	}
+
+	public boolean isPaused() {
+		return this.isPaused;
+	}
+	
+	public int getSpeedNotch() {
+		return this.speedNotch;
 	}
 
 	@Override
@@ -226,13 +284,26 @@ public class Game extends BasicGame {
 	public void update(GameContainer container, int delta) throws SlickException {
 		this.renderer.getCamera().update(delta);
 		this.overflow += delta;
-		int ticksToDo = (this.overflow / Game.TICK_LENGTH);
-		this.overflow %= Game.TICK_LENGTH;
+		int ticksToDo = (this.overflow / this.getTickLength());
+		this.overflow %= this.getTickLength();
 
 		for (int i = 0; i < ticksToDo; i++) {
-			if (this.isPaused) {
+			if (!this.isPaused) {
 				this.updateTick();
 			}
+		}
+	}
+
+	public int getTickLength() {
+		switch (this.speedNotch) {
+		case 2:
+			return Game.TICK_LENGTH / 2;
+		case 3:
+			return Game.TICK_LENGTH / 4;
+		case 4:
+			return Game.TICK_LENGTH / 10;
+		default:
+			return Game.TICK_LENGTH;
 		}
 	}
 
@@ -251,7 +322,7 @@ public class Game extends BasicGame {
 	private void cleanLists() {
 		for (int i = 0; i < this.cleanUp.size(); i++) {
 			Cell cell = this.cleanUp.get(i);
-			
+
 			if (cell.isFullyQuiescent()) {
 				this.grid.remove(cell);
 				this.cleanUp.remove(cell);
@@ -259,7 +330,7 @@ public class Game extends BasicGame {
 				i--;
 			}
 		}
-		
+
 		this.toUpdate.clear();
 		this.toUpdate.addAll(this.nextToUpdate);
 		this.nextToUpdate.clear();
@@ -267,11 +338,11 @@ public class Game extends BasicGame {
 
 	public void addToUpdate(Cell toUpdate) {
 		this.nextToUpdate.add(toUpdate);
-		
+
 		for (Coord adj : Adjacency.getAdjacency()) {
 			Coord relativeCoord = toUpdate.getCoord().plus(adj.reverse());
 			Cell cell = Game.getGame().getGrid().getCell(relativeCoord);
-			
+
 			if (cell == null) {
 				cell = new Cell(relativeCoord);
 				Game.getGame().getGrid().add(cell);
@@ -283,16 +354,16 @@ public class Game extends BasicGame {
 		if (!this.toUpdate.contains(cell)) {
 			this.toUpdate.add(cell);
 		}
-		
+
 		for (Coord adj : Adjacency.getAdjacency()) {
 			Coord relativeCoord = cell.getCoord().plus(adj.reverse());
 			Cell adjacentCell = Game.getGame().getGrid().getCell(relativeCoord);
-			
+
 			if (adjacentCell == null) {
 				cell = new Cell(relativeCoord);
 				Game.getGame().getGrid().add(cell);
 			}
-			
+
 			this.toUpdate.add(adjacentCell);
 		}
 	}

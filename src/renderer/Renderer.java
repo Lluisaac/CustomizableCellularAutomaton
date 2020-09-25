@@ -14,15 +14,17 @@ public class Renderer {
 	public static final int GAME_WIDTH = 1920;
 	
 	private Camera cam;
+	private Menu menu;
 	
-	public Renderer() {
+	public Renderer() throws SlickException {
 		this.cam = new Camera();
+		this.menu = new Menu();
 	}
 
 	public void render(Graphics g, Grid grid) throws SlickException {
+		renderMenu(g);
 		this.cam.render(g);
 		renderGrid(g, grid);
-		renderMenu(g);
 	}
 
 	private void renderGrid(Graphics g, List<Cell> grid) throws SlickException {
@@ -32,11 +34,15 @@ public class Renderer {
 
 	}
 
-	private void renderMenu(Graphics g) {
-
+	private void renderMenu(Graphics g) throws SlickException {
+		this.menu.render(g);
 	}
 	
 	public Camera getCamera() {
 		return this.cam;
+	}
+
+	public Menu getMenu() {
+		return this.menu;
 	}
 }
