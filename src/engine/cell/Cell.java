@@ -11,7 +11,7 @@ import engine.Game;
 import engine.cell.adjacency.Adjacency;
 import engine.cell.transition.Transition;
 import engine.grid.Coord;
-import renderer.CellImage;
+import engine.util.CellImage;
 
 public class Cell extends Element {
 	public static final int LENGTH = 32;
@@ -20,6 +20,7 @@ public class Cell extends Element {
 	private Coord coord;
 
 	private static List<Image> stateImagesList;
+	private static int numberOfStates;
 
 	private int state;
 	private int nextState;
@@ -32,8 +33,14 @@ public class Cell extends Element {
 
 	public static void init() throws SlickException {
 		Cell.stateImagesList = new ArrayList<Image>();
-		Cell.stateImagesList.add(new CellImage(25, 25, 25));
+		Cell.stateImagesList.add(new CellImage(0, 0, 0));
 		Cell.stateImagesList.add(new CellImage(255, 255, 255));
+		
+		Cell.numberOfStates = Cell.stateImagesList.size();
+	}
+
+	public static int getNumberOfStates() {
+		return Cell.numberOfStates;
 	}
 
 	@Override
@@ -53,13 +60,22 @@ public class Cell extends Element {
 
 	@Override
 	public void click() {
-		if (this.state == Cell.stateImagesList.size() - 1) {
+		if (this.state == Cell.getNumberOfStates() - 1) {
 			this.setState(0);
 		} else {
 			this.setState(this.state + 1);
 		}
 		
 		Game.getGame().addToUpdateUrgently(this);
+	}
+
+	public void click(int selectedState) {
+		if (selectedState == -1) {
+			this.click();
+		} else {
+			this.setState(selectedState);
+			Game.getGame().addToUpdateUrgently(this);
+		}
 	}
 
 	public int getState() {
@@ -114,6 +130,10 @@ public class Cell extends Element {
 		} else {
 			return false;
 		}
+	}
+
+	public static List<Image> getStateImages() {
+		return Cell.stateImagesList;
 	}
 
 }

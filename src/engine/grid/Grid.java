@@ -21,17 +21,19 @@ public class Grid extends ArrayList<Cell> {
 		return null;
 	}
 
-	public void click(int x, int y) throws SlickException {
+	public void click(int selectedState, int x, int y) throws SlickException {
 		Pair pair = Game.getGame().getRenderer().getCamera().transform(x, y);
 
 		Coord coord = new Coord(pair);
 		Cell cell = this.getCell(coord);
 
-		if (cell == null) {
+		if (cell == null && selectedState != 0) {
 			cell = new Cell(coord);
 			this.add(cell);
 		}
 
-		cell.click();
+		if (cell != null && cell.getState() != selectedState) {
+			cell.click(selectedState);
+		}
 	}
 }

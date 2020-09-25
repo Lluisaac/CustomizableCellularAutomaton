@@ -6,6 +6,10 @@ import org.newdawn.slick.SlickException;
 
 public abstract class Element {
 	
+	public Element() {
+		
+	}
+	
 	public abstract Image getImage() throws SlickException;
 	public abstract float getX();
 	public abstract float getY();

@@ -3,12 +3,15 @@ package renderer;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import engine.Element;
 import engine.Game;
+import engine.cell.Cell;
+import engine.util.ScalableImage;
 
 public class Menu {
 
@@ -22,19 +25,77 @@ public class Menu {
 	private Image speedEmpty;
 	private Image speedFull;
 	private Image speedFullPaused;
+	private Image selectedStateCycle;
+	
+	private List<Image> selectedStates;
 
 	public Menu() throws SlickException {
 
-		paused = new Image("assets/pause.png").getScaledCopy(0.5f);
-		unpaused = new Image("assets/unpause.png").getScaledCopy(0.5f);
-		center = new Image("assets/center.png").getScaledCopy(0.5f);
-		speedUp = new Image("assets/speedup.png").getScaledCopy(0.5f);
-		speedDown = new Image("assets/speeddown.png").getScaledCopy(0.5f);
-		speedEmpty = new Image("assets/empty.png").getScaledCopy(0.5f);
-		speedFull = new Image("assets/full.png").getScaledCopy(0.5f);
-		speedFullPaused = new Image("assets/half.png").getScaledCopy(0.5f);
-
 		this.elements = new ArrayList<Element>();
+
+		center = new ScalableImage("assets/center.png").getScaledCopy(0.5f);
+		paused = new ScalableImage("assets/pause.png").getScaledCopy(0.5f);
+		unpaused = new ScalableImage("assets/unpause.png").getScaledCopy(0.5f);
+		speedUp = new ScalableImage("assets/speedup.png").getScaledCopy(0.5f);
+		speedDown = new ScalableImage("assets/speeddown.png").getScaledCopy(0.5f);
+		speedEmpty = new ScalableImage("assets/empty.png").getScaledCopy(0.5f);
+		speedFull = new ScalableImage("assets/full.png").getScaledCopy(0.5f);
+		speedFullPaused = new ScalableImage("assets/half.png").getScaledCopy(0.5f);
+		selectedStateCycle = new ScalableImage("assets/cycle.png").getScaledCopy(0.5f);
+		
+		selectedStates = new ArrayList<Image>();
+
+		this.buildSelectedStates();
+
+		this.elements.add(new Element() {
+
+			@Override
+			public void click() {
+				Game.getGame().getRenderer().getCamera().center();
+			}
+
+			@Override
+			public Image getImage() throws SlickException {
+				return center;
+			}
+
+			@Override
+			public float getX() {
+				return 20;
+			}
+
+			@Override
+			public float getY() {
+				return Renderer.GAME_HEIGHT - center.getHeight() - 20;
+			}
+		});
+
+		this.elements.add(new Element() {
+			
+			@Override
+			public void click() {
+				Game.getGame().switchSelectedState();
+			}
+
+			@Override
+			public Image getImage() throws SlickException {
+				if (Game.getGame().getSelectedState() == -1) {
+					return selectedStateCycle;
+				} else {
+					return selectedStates.get(Game.getGame().getSelectedState());
+				}
+			}
+
+			@Override
+			public float getX() {
+				return 40 + center.getWidth();
+			}
+
+			@Override
+			public float getY() {
+				return Renderer.GAME_HEIGHT - selectedStateCycle.getHeight() - 20;
+			}
+		});
 
 		this.elements.add(new Element() {
 
@@ -67,29 +128,6 @@ public class Menu {
 
 			@Override
 			public void click() {
-				Game.getGame().getRenderer().getCamera().center();
-			}
-
-			@Override
-			public Image getImage() throws SlickException {
-				return center;
-			}
-
-			@Override
-			public float getX() {
-				return 20;
-			}
-
-			@Override
-			public float getY() {
-				return Renderer.GAME_HEIGHT - center.getHeight() - 20;
-			}
-		});
-
-		this.elements.add(new Element() {
-
-			@Override
-			public void click() {
 				Game.getGame().speedUp();
 			}
 
@@ -113,7 +151,7 @@ public class Menu {
 
 			@Override
 			public void click() {
-
+				System.out.println("Outch !!");
 			}
 
 			@Override
@@ -158,7 +196,8 @@ public class Menu {
 
 			@Override
 			public float getX() {
-				return Renderer.GAME_WIDTH - paused.getWidth() - speedUp.getWidth() - (2 * speedFull.getWidth()) - (4 * 20);
+				return Renderer.GAME_WIDTH - paused.getWidth() - speedUp.getWidth() - (2 * speedFull.getWidth())
+						- (4 * 20);
 			}
 
 			@Override
@@ -187,7 +226,8 @@ public class Menu {
 
 			@Override
 			public float getX() {
-				return Renderer.GAME_WIDTH - paused.getWidth() - speedUp.getWidth() - (3 * speedFull.getWidth()) - (5 * 20);
+				return Renderer.GAME_WIDTH - paused.getWidth() - speedUp.getWidth() - (3 * speedFull.getWidth())
+						- (5 * 20);
 			}
 
 			@Override
@@ -216,7 +256,8 @@ public class Menu {
 
 			@Override
 			public float getX() {
-				return Renderer.GAME_WIDTH - paused.getWidth() - speedUp.getWidth() - (4 * speedFull.getWidth()) - (6 * 20);
+				return Renderer.GAME_WIDTH - paused.getWidth() - speedUp.getWidth() - (4 * speedFull.getWidth())
+						- (6 * 20);
 			}
 
 			@Override
@@ -239,7 +280,8 @@ public class Menu {
 
 			@Override
 			public float getX() {
-				return Renderer.GAME_WIDTH - paused.getWidth() - speedUp.getWidth() - (4 * speedFull.getWidth()) - speedDown.getWidth() - (7 * 20);
+				return Renderer.GAME_WIDTH - paused.getWidth() - speedUp.getWidth() - (4 * speedFull.getWidth())
+						- speedDown.getWidth() - (7 * 20);
 			}
 
 			@Override
@@ -247,6 +289,23 @@ public class Menu {
 				return Renderer.GAME_HEIGHT - speedDown.getHeight() - 20;
 			}
 		});
+	}
+
+	private void buildSelectedStates() throws SlickException {
+		for (Image image : Cell.getStateImages()) {
+			Image circle = new ScalableImage("assets/circle.png");
+			
+			Color col = image.getColor(1, 1);
+
+			circle.getGraphics().setColor(new Color(0, 0, 0));
+			circle.getGraphics().fillRect(45, 45, 110, 110);
+			
+			circle.getGraphics().setColor(col);
+			circle.getGraphics().fillRect(50, 50, 100, 100);
+			circle.getGraphics().flush();
+			
+			this.selectedStates.add(circle.getScaledCopy(0.5f));
+		}
 	}
 
 	public void render(Graphics g) throws SlickException {

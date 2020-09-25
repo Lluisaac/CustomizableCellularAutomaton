@@ -40,6 +40,8 @@ public class Game extends BasicGame {
 	private boolean isPaused;
 
 	private int speedNotch;
+	
+	private int selectedState;
 
 	public Game() {
 		super("Customizable Cellular Automaton");
@@ -51,6 +53,8 @@ public class Game extends BasicGame {
 		this.isPaused = true;
 
 		this.speedNotch = 1;
+		
+		this.selectedState = -1;
 	}
 
 	public static Game getGame() {
@@ -195,10 +199,13 @@ public class Game extends BasicGame {
 				case Input.KEY_RIGHT:
 					cam.movingRight();
 					break;
+				case Input.KEY_Q:
+					switchSelectedState();
+					break;
 				case Input.KEY_C:
 					cam.center();
 					break;
-				case Input.KEY_P:
+				case Input.KEY_SPACE:
 					pause();
 					break;
 				case Input.KEY_ADD:
@@ -226,7 +233,7 @@ public class Game extends BasicGame {
 		if (possible.size() > 0) {
 			possible.get(possible.size() - 1).click();
 		} else {
-			this.grid.click(x, y);
+			this.grid.click(this.selectedState, x, y);
 		}
 	}
 
@@ -249,14 +256,37 @@ public class Game extends BasicGame {
 	public void speedDown() {
 		this.speedNotch--;
 
-		if (!this.isPaused && this.speedNotch <= 0) {
-			this.isPaused = true;
+		if (this.speedNotch <= 0) {
 			this.speedNotch = 0;
+			if (!this.isPaused) {
+				this.isPaused = true;
+			}
+		}
+	}
+	
+	public void switchSelectedState() {
+		this.selectedState++;
+		
+		if (this.selectedState >= Cell.getNumberOfStates()) {
+			this.selectedState = -1;
 		}
 	}
 
 	public void exit() {
 		this.container.exit();
+	}
+
+	public int getTickLength() {
+		switch (this.speedNotch) {
+		case 2:
+			return Game.TICK_LENGTH / 2;
+		case 3:
+			return Game.TICK_LENGTH / 4;
+		case 4:
+			return Game.TICK_LENGTH / 10;
+		default:
+			return Game.TICK_LENGTH;
+		}
 	}
 
 	public Grid getGrid() {
@@ -273,6 +303,10 @@ public class Game extends BasicGame {
 	
 	public int getSpeedNotch() {
 		return this.speedNotch;
+	}
+	
+	public int getSelectedState() {
+		return selectedState;
 	}
 
 	@Override
@@ -291,19 +325,6 @@ public class Game extends BasicGame {
 			if (!this.isPaused) {
 				this.updateTick();
 			}
-		}
-	}
-
-	public int getTickLength() {
-		switch (this.speedNotch) {
-		case 2:
-			return Game.TICK_LENGTH / 2;
-		case 3:
-			return Game.TICK_LENGTH / 4;
-		case 4:
-			return Game.TICK_LENGTH / 10;
-		default:
-			return Game.TICK_LENGTH;
 		}
 	}
 

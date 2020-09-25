@@ -22,9 +22,9 @@ public class Renderer {
 	}
 
 	public void render(Graphics g, Grid grid) throws SlickException {
-		renderMenu(g);
 		this.cam.render(g);
-		renderGrid(g, grid);
+		this.renderGrid(g, grid);
+		this.renderMenu(g);
 	}
 
 	private void renderGrid(Graphics g, List<Cell> grid) throws SlickException {
@@ -35,6 +35,7 @@ public class Renderer {
 	}
 
 	private void renderMenu(Graphics g) throws SlickException {
+		g.resetTransform();
 		this.menu.render(g);
 	}
 	
