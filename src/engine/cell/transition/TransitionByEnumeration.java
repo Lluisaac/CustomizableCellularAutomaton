@@ -10,42 +10,58 @@ import engine.grid.Coord;
 import engine.grid.Grid;
 import engine.util.Pair;
 
-public class TransitionByEnumeration extends Transition {
+public class TransitionByEnumeration extends Transition
+{
 
-	private AdjacencyByEnumeration enumeration;
+	private AdjacencyByEnumeration[] enumeration;
 
-	public TransitionByEnumeration(int originalState, AdjacencyByEnumeration enumeration, int resultingState) {
+	public TransitionByEnumeration(int originalState, int resultingState, AdjacencyByEnumeration... enumeration)
+	{
 		this.originalState = originalState;
 		this.enumeration = enumeration;
 		this.resultingState = resultingState;
 	}
 
 	@Override
-	public boolean isTransitionAdmissible(Coord coord, Grid grid) {
-		boolean result = false;
+	public boolean isTransitionAdmissible(Coord coord, Grid grid)
+	{
+		boolean result = true;
 
-		Map<Integer, Integer> values = buildValuesMap(coord, grid);
+		for(AdjacencyByEnumeration adj : this.enumeration)
+		{
+			boolean intermediate = true;
 
-		for (Pair pair : this.enumeration.getPairs()) {
-			if ((values.containsKey(pair.first) && values.get(pair.first) == pair.second)
-					|| (!values.containsKey(pair.first) && pair.second == 0)) {
-				result = true;
+			Map<Integer, Integer> values = buildValuesMap(coord, grid, adj);
+
+			for(Pair pair : adj.getPairs())
+			{
+				if(!((values.containsKey(pair.first) && values.get(pair.first) == pair.second) || (!values.containsKey(pair.first) && pair.second == 0)))
+				{
+					intermediate = false;
+				}
 			}
+
+			result &= intermediate;
 		}
 
 		return result;
 	}
 
-	private Map<Integer, Integer> buildValuesMap(Coord coord, Grid grid) {
+	private Map<Integer, Integer> buildValuesMap(Coord coord, Grid grid, Adjacency adj)
+	{
 		Map<Integer, Integer> values = new HashMap<Integer, Integer>();
 
-		for (Coord adj : Adjacency.getAdjacency()) {
-			Coord relativeCoord = coord.plus(adj);
-			Cell cell = grid.getCell(relativeCoord);
-			
-			if (cell == null) {
+		for(Coord relativeCoord : adj.getAdjacency())
+		{
+			Coord absoluteCoord = coord.plus(relativeCoord);
+			Cell cell = grid.getCell(absoluteCoord);
+
+			if(cell == null)
+			{
 				addValue(values, 0);
-			} else {
+			}
+			else
+			{
 				addValue(values, cell.getState());
 			}
 		}
@@ -53,8 +69,10 @@ public class TransitionByEnumeration extends Transition {
 		return values;
 	}
 
-	private void addValue(Map<Integer, Integer> valuesMap, int value) {
-		if (!valuesMap.containsKey(value)) {
+	private void addValue(Map<Integer, Integer> valuesMap, int value)
+	{
+		if(!valuesMap.containsKey(value))
+		{
 			valuesMap.put(value, 0);
 		}
 

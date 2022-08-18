@@ -5,11 +5,33 @@ import java.util.List;
 
 import engine.grid.Coord;
 
-public abstract class Adjacency {
-	
+public abstract class Adjacency
+{
+
 	protected static List<Coord> adjacency;
 
-	public static void init() {
+	private List<Coord> adjacentCells;
+
+	public Adjacency(Coord[] cell)
+	{
+		this.adjacentCells = new ArrayList<Coord>();
+
+		for(Coord coord : cell)
+		{
+			if(Adjacency.adjacency.contains(coord))
+			{
+				this.adjacentCells.add(coord);
+			}
+		}
+	}
+
+	public List<Coord> getAdjacency()
+	{
+		return adjacentCells;
+	}
+
+	public static void init()
+	{
 		Adjacency.adjacency = new ArrayList<Coord>();
 
 		Adjacency.adjacency.add(new Coord(-1, -1));
@@ -20,13 +42,28 @@ public abstract class Adjacency {
 		Adjacency.adjacency.add(new Coord(1, -1));
 		Adjacency.adjacency.add(new Coord(1, 0));
 		Adjacency.adjacency.add(new Coord(1, 1));
+		Adjacency.adjacency.add(new Coord(0, 2));
+		Adjacency.adjacency.add(new Coord(2, 0));
+		Adjacency.adjacency.add(new Coord(0, -2));
+		Adjacency.adjacency.add(new Coord(-2, 0));
+
+		Adjacency.adjacency.add(new Coord(1, -2));
+		Adjacency.adjacency.add(new Coord(2, -1));
+		Adjacency.adjacency.add(new Coord(2, 1));
+		Adjacency.adjacency.add(new Coord(1, 2));
+		Adjacency.adjacency.add(new Coord(-1, 2));
+		Adjacency.adjacency.add(new Coord(-2, 1));
+		Adjacency.adjacency.add(new Coord(-2, -1));
+		Adjacency.adjacency.add(new Coord(-1, -2));
 	}
-	
-	public static void setAdjacency(List<Coord> adj) {
+
+	public static void setAdjacency(List<Coord> adj)
+	{
 		Adjacency.adjacency = adj;
 	}
 
-	public static List<Coord> getAdjacency() {
+	public static List<Coord> getBasicAdjacency()
+	{
 		return Adjacency.adjacency;
 	}
 }

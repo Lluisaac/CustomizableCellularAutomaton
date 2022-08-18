@@ -13,7 +13,8 @@ import engine.cell.transition.Transition;
 import engine.grid.Coord;
 import engine.util.CellImage;
 
-public class Cell extends Element {
+public class Cell extends Element
+{
 	public static final int LENGTH = 32;
 	public static final int HEIGHT = 32;
 
@@ -25,71 +26,91 @@ public class Cell extends Element {
 	private int state;
 	private int nextState;
 
-	public Cell(Coord coord) {
+	public Cell(Coord coord)
+	{
 		this.coord = coord;
 
 		this.setState(0);
 	}
 
-	public static void init() throws SlickException {
+	public static void init() throws SlickException
+	{
 		Cell.stateImagesList = new ArrayList<Image>();
 		Cell.stateImagesList.add(new CellImage(0, 0, 0));
 		Cell.stateImagesList.add(new CellImage(255, 255, 255));
-		
+		Cell.stateImagesList.add(new CellImage(200, 120, 120));
+		Cell.stateImagesList.add(new CellImage(140, 80, 60));
+
 		Cell.numberOfStates = Cell.stateImagesList.size();
 	}
 
-	public static int getNumberOfStates() {
+	public static int getNumberOfStates()
+	{
 		return Cell.numberOfStates;
 	}
 
 	@Override
-	public Image getImage() throws SlickException {
+	public Image getImage() throws SlickException
+	{
 		return Cell.stateImagesList.get(this.state);
 	}
 
 	@Override
-	public float getX() {
+	public float getX()
+	{
 		return this.coord.x * Cell.HEIGHT;
 	}
 
 	@Override
-	public float getY() {
+	public float getY()
+	{
 		return this.coord.y * Cell.LENGTH;
 	}
 
 	@Override
-	public void click() {
-		if (this.state == Cell.getNumberOfStates() - 1) {
+	public void click()
+	{
+		if(this.state == Cell.getNumberOfStates() - 1)
+		{
 			this.setState(0);
-		} else {
+		}
+		else
+		{
 			this.setState(this.state + 1);
 		}
-		
+
 		Game.getGame().addToUpdateUrgently(this);
 	}
 
-	public void click(int selectedState) {
-		if (selectedState == -1) {
+	public void click(int selectedState)
+	{
+		if(selectedState == -1)
+		{
 			this.click();
-		} else {
+		}
+		else
+		{
 			this.setState(selectedState);
 			Game.getGame().addToUpdateUrgently(this);
 		}
 	}
 
-	public int getState() {
+	public int getState()
+	{
 		return this.state;
 	}
 
-	public void setState(int state) {
-		if (state != this.state) {
+	public void setState(int state)
+	{
+		if(state != this.state)
+		{
 			this.state = state;
 			this.nextState = state;
 
 			Game.getGame().addToUpdate(this);
 
-			for (Coord adj : Adjacency.getAdjacency()) {
+			for(Coord adj : Adjacency.getBasicAdjacency())
+			{
 				Coord relativeCoord = this.coord.plus(adj.reverse());
 				Cell cell = Game.getGame().getGrid().getCell(relativeCoord);
 
@@ -97,42 +118,55 @@ public class Cell extends Element {
 			}
 		}
 
-		if (this.state == 0) {
+		if(this.state == 0)
+		{
 			Game.getGame().addToCleanUp(this);
-		} else {
+		}
+		else
+		{
 			Game.getGame().removeFromCleanUp(this);
 		}
 	}
 
-	public void preUpdate() {
+	public void preUpdate()
+	{
 		this.nextState = Transition.getTransitionedState(this.coord);
 	}
 
-	public void postUpdate() {
+	public void postUpdate()
+	{
 		this.setState(this.nextState);
 	}
 
-	public Coord getCoord() {
+	public Coord getCoord()
+	{
 		return this.coord;
 	}
 
-	public boolean isFullyQuiescent() {
-		if (this.state == 0) {
-			for (Coord adj : Adjacency.getAdjacency()) {
+	public boolean isFullyQuiescent()
+	{
+		if(this.state == 0)
+		{
+			for(Coord adj : Adjacency.getBasicAdjacency())
+			{
 				Coord relativeCoord = this.coord.plus(adj);
 				Cell cell = Game.getGame().getGrid().getCell(relativeCoord);
 
-				if (cell != null && cell.getState() != 0) {
+				if(cell != null && cell.getState() != 0)
+				{
 					return false;
 				}
 			}
 			return true;
-		} else {
+		}
+		else
+		{
 			return false;
 		}
 	}
 
-	public static List<Image> getStateImages() {
+	public static List<Image> getStateImages()
+	{
 		return Cell.stateImagesList;
 	}
 
