@@ -1,8 +1,5 @@
 package engine.cell.transition;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import engine.cell.Cell;
 import engine.cell.adjacency.Adjacency;
 import engine.cell.adjacency.AdjacencyByEnumeration;
@@ -14,12 +11,15 @@ public class TransitionByEnumeration extends Transition
 {
 
 	private AdjacencyByEnumeration[] enumeration;
+	private int[] stateArray;
 
 	public TransitionByEnumeration(int originalState, int resultingState, AdjacencyByEnumeration... enumeration)
 	{
 		this.originalState = originalState;
-		this.enumeration = enumeration;
 		this.resultingState = resultingState;
+		this.enumeration = enumeration;
+		
+		this.stateArray = new int[Cell.getNumberOfStates()];
 	}
 
 	@Override
@@ -31,11 +31,11 @@ public class TransitionByEnumeration extends Transition
 		{
 			boolean intermediate = true;
 
-			Map<Integer, Integer> values = buildValuesMap(coord, grid, adj);
+			buildAdjQuantitiesArray(coord, grid, adj);
 
 			for(Pair pair : adj.getPairs())
 			{
-				if(!((values.containsKey(pair.first) && values.get(pair.first) == pair.second) || (!values.containsKey(pair.first) && pair.second == 0)))
+				if(this.stateArray[pair.first] != pair.second)
 				{
 					intermediate = false;
 				}
@@ -47,9 +47,9 @@ public class TransitionByEnumeration extends Transition
 		return result;
 	}
 
-	private Map<Integer, Integer> buildValuesMap(Coord coord, Grid grid, Adjacency adj)
+	private void buildAdjQuantitiesArray(Coord coord, Grid grid, Adjacency adj)
 	{
-		Map<Integer, Integer> values = new HashMap<Integer, Integer>();
+		this.clearStateArray();
 
 		for(Coord relativeCoord : adj.getAdjacency())
 		{
@@ -58,25 +58,21 @@ public class TransitionByEnumeration extends Transition
 
 			if(cell == null)
 			{
-				addValue(values, 0);
+				this.stateArray[0]++;
 			}
 			else
 			{
-				addValue(values, cell.getState());
+				this.stateArray[cell.getState()]++;
 			}
 		}
-
-		return values;
 	}
 
-	private void addValue(Map<Integer, Integer> valuesMap, int value)
+	private void clearStateArray()
 	{
-		if(!valuesMap.containsKey(value))
+		for(int i = 0; i < stateArray.length; i++)
 		{
-			valuesMap.put(value, 0);
+			stateArray[i] = 0;
 		}
-
-		valuesMap.replace(value, valuesMap.get(value) + 1);
 	}
 
 }

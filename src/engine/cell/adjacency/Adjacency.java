@@ -27,7 +27,7 @@ public abstract class Adjacency
 
 	public List<Coord> getAdjacency()
 	{
-		return adjacentCells;
+		return this.adjacentCells;
 	}
 
 	public static void init()
@@ -42,19 +42,6 @@ public abstract class Adjacency
 		Adjacency.adjacency.add(new Coord(1, -1));
 		Adjacency.adjacency.add(new Coord(1, 0));
 		Adjacency.adjacency.add(new Coord(1, 1));
-		Adjacency.adjacency.add(new Coord(0, 2));
-		Adjacency.adjacency.add(new Coord(2, 0));
-		Adjacency.adjacency.add(new Coord(0, -2));
-		Adjacency.adjacency.add(new Coord(-2, 0));
-
-		Adjacency.adjacency.add(new Coord(1, -2));
-		Adjacency.adjacency.add(new Coord(2, -1));
-		Adjacency.adjacency.add(new Coord(2, 1));
-		Adjacency.adjacency.add(new Coord(1, 2));
-		Adjacency.adjacency.add(new Coord(-1, 2));
-		Adjacency.adjacency.add(new Coord(-2, 1));
-		Adjacency.adjacency.add(new Coord(-2, -1));
-		Adjacency.adjacency.add(new Coord(-1, -2));
 	}
 
 	public static void setAdjacency(List<Coord> adj)

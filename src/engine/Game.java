@@ -402,7 +402,7 @@ public class Game extends BasicGame
 		{
 			Cell cell = this.cleanUp.get(i);
 
-			if(cell.isFullyQuiescent())
+			if(cell.isFullyQuiescent() && cell.getState() == 0)
 			{
 				this.grid.remove(cell);
 				this.cleanUp.remove(cell);

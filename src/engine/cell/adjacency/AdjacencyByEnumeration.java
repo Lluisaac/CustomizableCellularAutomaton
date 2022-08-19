@@ -22,7 +22,7 @@ public class AdjacencyByEnumeration extends Adjacency
 		this.quantityForState = new ArrayList<Pair>();
 	}
 
-	public void addQuantityForState(int state, int quantity)
+	public void addStateAndQuantity(int state, int quantity)
 	{
 		this.quantityForState.add(new Pair(state, quantity));
 	}

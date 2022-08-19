@@ -145,24 +145,17 @@ public class Cell extends Element
 
 	public boolean isFullyQuiescent()
 	{
-		if(this.state == 0)
+		for(Coord adj : Adjacency.getBasicAdjacency())
 		{
-			for(Coord adj : Adjacency.getBasicAdjacency())
-			{
-				Coord relativeCoord = this.coord.plus(adj);
-				Cell cell = Game.getGame().getGrid().getCell(relativeCoord);
+			Coord relativeCoord = this.coord.plus(adj);
+			Cell cell = Game.getGame().getGrid().getCell(relativeCoord);
 
-				if(cell != null && cell.getState() != 0)
-				{
-					return false;
-				}
+			if(cell != null && cell.getState() != 0)
+			{
+				return false;
 			}
-			return true;
 		}
-		else
-		{
-			return false;
-		}
+		return true;
 	}
 
 	public static List<Image> getStateImages()
