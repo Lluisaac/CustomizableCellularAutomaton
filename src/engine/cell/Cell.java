@@ -3,6 +3,8 @@ package engine.cell;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
@@ -37,11 +39,21 @@ public class Cell extends Element
 	{
 		Cell.stateImagesList = new ArrayList<Image>();
 		Cell.stateImagesList.add(new CellImage(0, 0, 0));
-		Cell.stateImagesList.add(new CellImage(255, 255, 255));
-		Cell.stateImagesList.add(new CellImage(200, 120, 120));
-		Cell.stateImagesList.add(new CellImage(140, 80, 60));
+		
+		Cell.importJsonCells();
 
 		Cell.numberOfStates = Cell.stateImagesList.size();
+	}
+
+	private static void importJsonCells() throws SlickException
+	{
+		JSONArray arr = Game.getGame().json.getJSONArray("states");
+		
+		for(int i = 0; i < arr.length(); i++)
+		{
+			JSONObject color = arr.getJSONObject(i);
+			Cell.stateImagesList.add(new CellImage(color.getInt("red"), color.getInt("green"), color.getInt("blue")));
+		}
 	}
 
 	public static int getNumberOfStates()

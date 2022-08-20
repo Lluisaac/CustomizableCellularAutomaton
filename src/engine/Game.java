@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.json.JSONObject;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -28,6 +29,8 @@ public class Game extends BasicGame
 
 	private static Game singleton;
 	private GameContainer container;
+	
+	public final JSONObject json;
 
 	private int overflow;
 	private Renderer renderer;
@@ -44,9 +47,11 @@ public class Game extends BasicGame
 
 	private int selectedState;
 
-	public Game()
-	{
+	public Game(JSONObject json)
+	{		
 		super("Customizable Cellular Automaton");
+		
+		this.json = json;
 
 		this.overflow = 0;
 
@@ -59,13 +64,15 @@ public class Game extends BasicGame
 		this.selectedState = -1;
 	}
 
+	public static Game setGame(JSONObject json)
+	{
+		Game.singleton = new Game(json);
+
+		return Game.singleton;
+	}
+
 	public static Game getGame()
 	{
-		if(Game.singleton == null)
-		{
-			Game.singleton = new Game();
-		}
-
 		return Game.singleton;
 	}
 

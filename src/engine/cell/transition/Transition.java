@@ -3,6 +3,9 @@ package engine.cell.transition;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import engine.Game;
 import engine.cell.Cell;
 import engine.cell.adjacency.AdjacencyByEnumeration;
@@ -23,38 +26,37 @@ public abstract class Transition
 	{
 		Transition.allTransitions = new ArrayList<Transition>();
 		Transition.allSimplifiedTransitions = new ArrayList<Pair>();
+		
+		Transition.importJsonTransition();
+	}
 
-		AdjacencyByEnumeration adj = new AdjacencyByEnumeration();
-		adj.addStateAndQuantity(1, 3);
-		Transition.add(new TransitionByEnumeration(0, 1, adj));
+	private static void importJsonTransition()
+	{
+		JSONObject json = Game.getGame().json.getJSONObject("transition");
+		Transition.importJsonTransitionEnumeration(json);
+	}
 
-		adj = new AdjacencyByEnumeration();
-		adj.addStateAndQuantity(1, 0);
-		Transition.add(new TransitionByEnumeration(1, 0, adj));
-
-		adj = new AdjacencyByEnumeration();
-		adj.addStateAndQuantity(1, 1);
-		Transition.add(new TransitionByEnumeration(1, 0, adj));
-
-		adj = new AdjacencyByEnumeration();
-		adj.addStateAndQuantity(1, 4);
-		Transition.add(new TransitionByEnumeration(1, 0, adj));
-
-		adj = new AdjacencyByEnumeration();
-		adj.addStateAndQuantity(1, 5);
-		Transition.add(new TransitionByEnumeration(1, 0, adj));
-
-		adj = new AdjacencyByEnumeration();
-		adj.addStateAndQuantity(1, 6);
-		Transition.add(new TransitionByEnumeration(1, 0, adj));
-
-		adj = new AdjacencyByEnumeration();
-		adj.addStateAndQuantity(1, 7);
-		Transition.add(new TransitionByEnumeration(1, 0, adj));
-
-		adj = new AdjacencyByEnumeration();
-		adj.addStateAndQuantity(1, 8);
-		Transition.add(new TransitionByEnumeration(1, 0, adj));
+	private static void importJsonTransitionEnumeration(JSONObject json)
+	{
+		JSONArray arr = json.getJSONArray("enumeration");
+		
+		for(int i = 0; i < arr.length(); i++)
+		{
+			JSONObject transition = arr.getJSONObject(i);
+			
+			JSONArray arrAdjacency = transition.getJSONArray("adjacency");
+			
+			AdjacencyByEnumeration adjEnum = new AdjacencyByEnumeration();
+			
+			for(int j = 0; j < arrAdjacency.length(); j++)
+			{
+				JSONObject adjacency = arrAdjacency.getJSONObject(j);
+				
+				adjEnum.addStateAndQuantity(adjacency.getInt("state"), adjacency.getInt("quantity"));
+			}
+			
+			Transition.add(new TransitionByEnumeration(transition.getInt("initialState"), transition.getInt("resultingState"), adjEnum));
+		}
 	}
 
 	public static void add(Transition transition)

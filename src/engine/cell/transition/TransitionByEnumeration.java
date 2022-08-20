@@ -25,26 +25,20 @@ public class TransitionByEnumeration extends Transition
 	@Override
 	public boolean isTransitionAdmissible(Coord coord, Grid grid)
 	{
-		boolean result = true;
-
 		for(AdjacencyByEnumeration adj : this.enumeration)
 		{
-			boolean intermediate = true;
-
 			buildAdjQuantitiesArray(coord, grid, adj);
 
 			for(Pair pair : adj.getPairs())
 			{
 				if(this.stateArray[pair.first] != pair.second)
 				{
-					intermediate = false;
+					return false;
 				}
 			}
-
-			result &= intermediate;
 		}
 
-		return result;
+		return true;
 	}
 
 	private void buildAdjQuantitiesArray(Coord coord, Grid grid, Adjacency adj)

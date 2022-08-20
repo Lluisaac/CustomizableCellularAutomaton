@@ -20,24 +20,18 @@ public class TransitionByExtension extends Transition
 
 	public boolean isTransitionAdmissible(Coord coord, Grid grid)
 	{
-		boolean result = true;
-
 		for(AdjacencyByExtension adj : this.adjacentCells)
 		{
-			boolean intermediate = true;
-
 			for(Entry<Coord, Integer> entry : adj.entrySet())
 			{
 				Coord relativeCoord = coord.plus(entry.getKey());
 				if(grid.getCell(relativeCoord).getState() != entry.getValue())
 				{
-					intermediate = false;
+					return false;
 				}
 			}
-
-			result &= intermediate;
 		}
 
-		return result;
+		return true;
 	}
 }

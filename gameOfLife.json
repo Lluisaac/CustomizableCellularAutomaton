@@ -1,0 +1,138 @@
+{
+	"states": [
+		{
+			"red": 255,
+			"green": 255,
+			"blue": 255
+		},
+		{
+			"red": 0,
+			"green": 255,
+			"blue": 255
+		}
+	],
+	"adjacency": [
+		{
+			"x": -1,
+			"y": -1
+		},
+		{
+			"x": -1,
+			"y": -0
+		},
+		{
+			"x": -1,
+			"y": 1
+		},
+		{
+			"x": 0,
+			"y": -1
+		},
+		{
+			"x": 0,
+			"y": 1
+		},
+		{
+			"x": 1,
+			"y": -1
+		},
+		{
+			"x": 1,
+			"y": 0
+		},
+		{
+			"x": 1,
+			"y": 1
+		}
+	],
+	"transition": {
+		"enumeration": [
+			{
+				"initialState": 0,
+				"resultingState": 1,
+				"adjacency": [
+					{
+						"state": 1,
+						"quantity": 3
+					}
+				]
+			},
+			{
+				"initialState": 1,
+				"resultingState": 0,
+				"adjacency": [
+					{
+						"state": 1,
+						"quantity": 0
+					}
+				]
+			},
+			{
+				"initialState": 1,
+				"resultingState": 0,
+				"adjacency": [
+					{
+						"state": 1,
+						"quantity": 1
+					}
+				]
+			},
+			{
+				"initialState": 1,
+				"resultingState": 0,
+				"adjacency": [
+					{
+						"state": 1,
+						"quantity": 4
+					}
+				]
+			},
+			{
+				"initialState": 1,
+				"resultingState": 0,
+				"adjacency": [
+					{
+						"state": 1,
+						"quantity": 5
+					}
+				]
+			},
+			{
+				"initialState": 1,
+				"resultingState": 0,
+				"adjacency": [
+					{
+						"state": 1,
+						"quantity": 6
+					}
+				]
+			},
+			{
+				"initialState": 1,
+				"resultingState": 0,
+				"adjacency": [
+					{
+						"state": 1,
+						"quantity": 7
+					}
+				]
+			},
+			{
+				"initialState": 1,
+				"resultingState": 0,
+				"adjacency": [
+					{
+						"state": 1,
+						"quantity": 8
+					}
+				]
+			}
+		],
+		"extension": [
+		
+		],
+		"default": [
+		
+		]
+	} 
+}

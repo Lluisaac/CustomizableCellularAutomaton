@@ -2,7 +2,6 @@ package renderer;
 
 import java.util.List;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
@@ -26,10 +25,6 @@ public class Renderer
 
 	public void render(Graphics g, Grid grid) throws SlickException
 	{
-		g.setColor(new Color(128, 128, 128));
-		g.fillRect(0, 0, 2000, 2000);
-		g.flush();
-		
 		this.cam.render(g);		
 		this.renderGrid(g, grid);
 		this.renderMenu(g);
@@ -39,7 +34,10 @@ public class Renderer
 	{
 		for(Cell cell : grid)
 		{
-			g.drawImage(cell.getImage(), cell.getX(), cell.getY());
+			if (cell.getState() != 0)
+			{				
+				g.drawImage(cell.getImage(), cell.getX(), cell.getY());
+			}
 		}
 
 	}
