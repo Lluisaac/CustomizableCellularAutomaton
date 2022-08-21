@@ -36,6 +36,7 @@ public abstract class Transition
 	{
 		JSONObject transition = Game.getGame().json.getJSONObject("transition");
 		Transition.importJsonTransitionEnumeration(transition);
+		Transition.importJsonTransitionDefault(transition);
 	}
 
 	private static void importJsonTransitionEnumeration(JSONObject transition)
@@ -67,13 +68,11 @@ public abstract class Transition
 	}
 
 	private static Coord[] importAdjacencySubset(JSONObject enumeration)
-	{
-		Coord[] adjacencySubset;
-		
+	{		
 		try 
 		{
 			JSONArray adjSubset = enumeration.getJSONArray("adjacency");
-			adjacencySubset = new Coord[adjSubset.length()];
+			Coord[] adjacencySubset = new Coord[adjSubset.length()];
 			
 			for(int j = 0; j < adjSubset.length(); j++)
 			{
@@ -81,13 +80,24 @@ public abstract class Transition
 				adjacencySubset[j] = new Coord(jsonCoords.getInt("x"), jsonCoords.getInt("y"));
 			}
 			
+			return adjacencySubset;
 		}
 		catch (JSONException e)
 		{				
-			adjacencySubset = Adjacency.getBasicAdjacency().toArray(new Coord[0]);
+			return Adjacency.getBasicAdjacency().toArray(new Coord[0]);
 		}
+	}
+
+	private static void importJsonTransitionDefault(JSONObject transition)
+	{
+		JSONArray arr = transition.getJSONArray("default");
 		
-		return adjacencySubset;
+		for(int i = 0; i < arr.length(); i++)
+		{
+			JSONObject defaultTrans = arr.getJSONObject(i);
+			
+			Transition.add(new TransitionByDefault(defaultTrans.getInt("initialState"), defaultTrans.getInt("resultingState")));
+		}
 	}
 
 	public static void add(Transition transition)

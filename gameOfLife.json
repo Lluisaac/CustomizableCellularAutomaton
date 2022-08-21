@@ -9,6 +9,16 @@
 			"red": 0,
 			"green": 255,
 			"blue": 255
+		},
+		{
+			"red": 0,
+			"green": 128,
+			"blue": 0
+		},
+		{
+			"red": 50,
+			"green": 200,
+			"blue": 50
 		}
 	],
 	"adjacency": [
@@ -172,7 +182,14 @@
 		
 		],
 		"default": [
-		
+			{
+				"initialState": 3,
+				"resultingState": 4
+			},
+			{
+				"initialState": 4,
+				"resultingState": 3
+			}
 		]
 	} 
 }
