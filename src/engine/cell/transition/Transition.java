@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import engine.Game;
 import engine.cell.Cell;
+import engine.cell.adjacency.Adjacency;
 import engine.cell.adjacency.AdjacencyByEnumeration;
 import engine.grid.Coord;
 import engine.grid.Grid;
@@ -32,31 +34,60 @@ public abstract class Transition
 
 	private static void importJsonTransition()
 	{
-		JSONObject json = Game.getGame().json.getJSONObject("transition");
-		Transition.importJsonTransitionEnumeration(json);
+		JSONObject transition = Game.getGame().json.getJSONObject("transition");
+		Transition.importJsonTransitionEnumeration(transition);
 	}
 
-	private static void importJsonTransitionEnumeration(JSONObject json)
+	private static void importJsonTransitionEnumeration(JSONObject transition)
 	{
-		JSONArray arr = json.getJSONArray("enumeration");
+		JSONArray arr = transition.getJSONArray("enumeration");
 		
 		for(int i = 0; i < arr.length(); i++)
 		{
-			JSONObject transition = arr.getJSONObject(i);
+			JSONObject enumeration = arr.getJSONObject(i);
 			
-			JSONArray arrAdjacency = transition.getJSONArray("adjacency");
+			Transition.importEnumeration(enumeration);
+		}
+	}
+
+	private static void importEnumeration(JSONObject enumeration)
+	{
+		JSONArray stateQuantities = enumeration.getJSONArray("stateQuantities");
+		
+		AdjacencyByEnumeration adjEnum = new AdjacencyByEnumeration(Transition.importAdjacencySubset(enumeration));
+		
+		for(int j = 0; j < stateQuantities.length(); j++)
+		{
+			JSONObject adjacency = stateQuantities.getJSONObject(j);
 			
-			AdjacencyByEnumeration adjEnum = new AdjacencyByEnumeration();
+			adjEnum.addStateAndQuantity(adjacency.getInt("state"), adjacency.getInt("quantity"));
+		}
+		
+		Transition.add(new TransitionByEnumeration(enumeration.getInt("initialState"), enumeration.getInt("resultingState"), adjEnum));
+	}
+
+	private static Coord[] importAdjacencySubset(JSONObject enumeration)
+	{
+		Coord[] adjacencySubset;
+		
+		try 
+		{
+			JSONArray adjSubset = enumeration.getJSONArray("adjacency");
+			adjacencySubset = new Coord[adjSubset.length()];
 			
-			for(int j = 0; j < arrAdjacency.length(); j++)
+			for(int j = 0; j < adjSubset.length(); j++)
 			{
-				JSONObject adjacency = arrAdjacency.getJSONObject(j);
-				
-				adjEnum.addStateAndQuantity(adjacency.getInt("state"), adjacency.getInt("quantity"));
+				JSONObject jsonCoords = adjSubset.getJSONObject(j);
+				adjacencySubset[j] = new Coord(jsonCoords.getInt("x"), jsonCoords.getInt("y"));
 			}
 			
-			Transition.add(new TransitionByEnumeration(transition.getInt("initialState"), transition.getInt("resultingState"), adjEnum));
 		}
+		catch (JSONException e)
+		{				
+			adjacencySubset = Adjacency.getBasicAdjacency().toArray(new Coord[0]);
+		}
+		
+		return adjacencySubset;
 	}
 
 	public static void add(Transition transition)

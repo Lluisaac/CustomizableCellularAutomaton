@@ -49,8 +49,48 @@
 		"enumeration": [
 			{
 				"initialState": 0,
-				"resultingState": 1,
+				"resultingState": 2,
+				"stateQuantities": [
+					{
+						"state": 2,
+						"quantity": 1
+					}
+				],
 				"adjacency": [
+					{
+						"x": 0,
+						"y": 1
+					},
+					{
+						"x": 0,
+						"y": -1
+					}
+				]
+			},
+			{
+				"initialState": 0,
+				"resultingState": 2,
+				"stateQuantities": [
+					{
+						"state": 2,
+						"quantity": 2
+					}
+				],
+				"adjacency": [
+					{
+						"x": 0,
+						"y": 1
+					},
+					{
+						"x": 0,
+						"y": -1
+					}
+				]
+			},
+			{
+				"initialState": 0,
+				"resultingState": 1,
+				"stateQuantities": [
 					{
 						"state": 1,
 						"quantity": 3
@@ -60,7 +100,7 @@
 			{
 				"initialState": 1,
 				"resultingState": 0,
-				"adjacency": [
+				"stateQuantities": [
 					{
 						"state": 1,
 						"quantity": 0
@@ -70,7 +110,7 @@
 			{
 				"initialState": 1,
 				"resultingState": 0,
-				"adjacency": [
+				"stateQuantities": [
 					{
 						"state": 1,
 						"quantity": 1
@@ -80,7 +120,7 @@
 			{
 				"initialState": 1,
 				"resultingState": 0,
-				"adjacency": [
+				"stateQuantities": [
 					{
 						"state": 1,
 						"quantity": 4
@@ -90,7 +130,7 @@
 			{
 				"initialState": 1,
 				"resultingState": 0,
-				"adjacency": [
+				"stateQuantities": [
 					{
 						"state": 1,
 						"quantity": 5
@@ -100,7 +140,7 @@
 			{
 				"initialState": 1,
 				"resultingState": 0,
-				"adjacency": [
+				"stateQuantities": [
 					{
 						"state": 1,
 						"quantity": 6
@@ -110,7 +150,7 @@
 			{
 				"initialState": 1,
 				"resultingState": 0,
-				"adjacency": [
+				"stateQuantities": [
 					{
 						"state": 1,
 						"quantity": 7
@@ -120,7 +160,7 @@
 			{
 				"initialState": 1,
 				"resultingState": 0,
-				"adjacency": [
+				"stateQuantities": [
 					{
 						"state": 1,
 						"quantity": 8

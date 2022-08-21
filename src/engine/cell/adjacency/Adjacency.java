@@ -39,8 +39,6 @@ public abstract class Adjacency
 		Adjacency.adjacency = new ArrayList<Coord>();
 		
 		Adjacency.importJsonAdjacency();
-		
-		System.out.println(adjacency);
 	}
 
 	private static void importJsonAdjacency()
