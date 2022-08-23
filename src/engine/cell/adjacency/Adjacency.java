@@ -22,10 +22,15 @@ public abstract class Adjacency
 
 		for(Coord coord : cell)
 		{
-			if(Adjacency.adjacency.contains(coord))
-			{
-				this.adjacentCells.add(coord);
-			}
+			this.addToAdjacency(coord);
+		}
+	}
+	
+	protected void addToAdjacency(Coord coord)
+	{
+		if (!this.adjacentCells.contains(coord) && Adjacency.adjacency.contains(coord))
+		{			
+			this.adjacentCells.add(coord);
 		}
 	}
 

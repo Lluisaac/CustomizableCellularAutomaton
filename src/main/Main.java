@@ -16,15 +16,26 @@ public class Main
 
 	public static void main(String[] args) throws SlickException, IOException
 	{
+		Path path;
+		
 		if (args.length == 1)
 		{
-			String jsonString = Files.readString(Path.of(args[0]));
-			JSONObject json = new JSONObject(jsonString);
-			new AppGameContainer(Game.setGame(json), Renderer.GAME_WIDTH, Renderer.GAME_HEIGHT, true).start();
+			path = Path.of(args[0]);
 		}
 		else
 		{
-			System.out.println("Please put a JSON file path as argument and nothing else");
+			path = Path.of("rules.json");
+		}
+		
+		try
+		{			
+			String jsonString = Files.readString(path);
+			JSONObject json = new JSONObject(jsonString);
+			new AppGameContainer(Game.setGame(json), Renderer.GAME_WIDTH, Renderer.GAME_HEIGHT, true).start();
+		}
+		catch (IOException e)
+		{
+			System.out.println("File " + path + " not found. Start argain with correct json rules file as argument.");
 		}
 	}
 }

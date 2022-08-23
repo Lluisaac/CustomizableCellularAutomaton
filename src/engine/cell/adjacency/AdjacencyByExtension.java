@@ -14,12 +14,7 @@ public class AdjacencyByExtension extends Adjacency
 
 	public AdjacencyByExtension()
 	{
-		this(Adjacency.getBasicAdjacency().toArray(new Coord[0]));
-	}
-
-	public AdjacencyByExtension(Coord... cell)
-	{
-		super(cell);
+		super(new Coord[0]);
 		this.relativeCoordsPerState = new HashMap<Coord, Integer>();
 	}
 
@@ -28,6 +23,7 @@ public class AdjacencyByExtension extends Adjacency
 		if(Adjacency.adjacency.contains(coord))
 		{
 			this.relativeCoordsPerState.put(coord, state);
+			super.addToAdjacency(coord);
 		}
 	}
 

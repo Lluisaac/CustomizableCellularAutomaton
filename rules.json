@@ -6,19 +6,24 @@
 			"blue": 255
 		},
 		{
+			"red": 100,
+			"green": 100,
+			"blue": 100
+		},
+		{
+			"red": 0,
+			"green": 170,
+			"blue": 0
+		},
+		{
 			"red": 0,
 			"green": 255,
 			"blue": 255
 		},
 		{
-			"red": 0,
-			"green": 128,
+			"red": 255,
+			"green": 0,
 			"blue": 0
-		},
-		{
-			"red": 50,
-			"green": 200,
-			"blue": 50
 		}
 	],
 	"adjacency": [
@@ -66,7 +71,7 @@
 						"quantity": 1
 					}
 				],
-				"adjacency": [
+				"adjacencySubset": [
 					{
 						"x": 0,
 						"y": 1
@@ -86,7 +91,7 @@
 						"quantity": 2
 					}
 				],
-				"adjacency": [
+				"adjacencySubset": [
 					{
 						"x": 0,
 						"y": 1
@@ -179,7 +184,22 @@
 			}
 		],
 		"extension": [
-		
+			{
+				"initialState": 0,
+				"resultingState": 5,
+				"statePositions": [
+					{
+						"state": 5,
+						"x": -1,
+						"y": -1
+					},
+					{
+						"state": 0,
+						"x": 1,
+						"y": 1
+					}
+				]
+			},
 		],
 		"default": [
 			{
