@@ -1,5 +1,6 @@
 package main;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,6 +17,9 @@ public class Main
 
 	public static void main(String[] args) throws SlickException, IOException
 	{
+		File nativePath = new File("natives/");
+		System.setProperty("org.lwjgl.librarypath", nativePath.getAbsolutePath());
+		
 		Path path;
 		
 		if (args.length == 1)
