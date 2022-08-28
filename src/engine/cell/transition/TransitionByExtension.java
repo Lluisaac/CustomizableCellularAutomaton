@@ -16,9 +16,16 @@ public class TransitionByExtension extends Transition
 
 	public TransitionByExtension(int originalState, int resultingState, AdjacencyByExtension... adjacentCells)
 	{
+		this(originalState, resultingState, 1, adjacentCells);
+	}
+
+	public TransitionByExtension(int originalState, int resultingState, double probability, AdjacencyByExtension... adjacentCells)
+	{
 		this.originalState = originalState;
-		this.adjacentCells = adjacentCells;
 		this.resultingState = resultingState;
+		this.probability = probability;
+
+		this.adjacentCells = adjacentCells;
 	}
 
 	public boolean isTransitionAdmissible(Coord coord, Grid grid)
@@ -42,7 +49,7 @@ public class TransitionByExtension extends Transition
 			}
 		}
 
-		return true;
+		return super.getRandomChance();
 	}
 	
 	public static void importJsonTransitionExtension(JSONObject transition)

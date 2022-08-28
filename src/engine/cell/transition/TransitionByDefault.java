@@ -8,16 +8,22 @@ import engine.grid.Grid;
 
 public class TransitionByDefault extends Transition
 {
-
+	
 	public TransitionByDefault(int originalState, int resultingState)
+	{
+		this(originalState, resultingState, 1);
+	}
+	
+	public TransitionByDefault(int originalState, int resultingState, double probability)
 	{
 		this.originalState = originalState;
 		this.resultingState = resultingState;
+		this.probability = probability;
 	}
-
+	
 	public boolean isTransitionAdmissible(Coord coord, Grid grid)
 	{
-		return true;
+		return super.getRandomChance();
 	}
 	
 	public static void importJsonTransitionDefault(JSONObject transition)

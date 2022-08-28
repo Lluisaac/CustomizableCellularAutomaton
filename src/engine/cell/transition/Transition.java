@@ -2,6 +2,7 @@ package engine.cell.transition;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.json.JSONObject;
 
@@ -17,8 +18,12 @@ public abstract class Transition
 	private static List<Transition> allTransitions;
 	private static List<Pair> allSimplifiedTransitions;
 
+	private static Random rand = new Random();
+
 	protected int originalState;
 	protected int resultingState;
+	
+	protected double probability;
 
 	public static void init()
 	{
@@ -65,4 +70,16 @@ public abstract class Transition
 	}
 
 	public abstract boolean isTransitionAdmissible(Coord coord, Grid grille);
+
+	public boolean getRandomChance()
+	{
+		if (this.probability == 1)
+		{
+			return true;
+		}
+		else
+		{
+			return Transition.rand.nextDouble() <= this.probability;
+		}
+	}
 }

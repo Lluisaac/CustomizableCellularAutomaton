@@ -19,8 +19,15 @@ public class TransitionByEnumeration extends Transition
 
 	public TransitionByEnumeration(int originalState, int resultingState, AdjacencyByEnumeration... enumeration)
 	{
+		this(originalState, resultingState, 1, enumeration);
+	}
+
+	public TransitionByEnumeration(int originalState, int resultingState, double probability, AdjacencyByEnumeration... enumeration)
+	{
 		this.originalState = originalState;
 		this.resultingState = resultingState;
+		this.probability = probability;
+		
 		this.enumeration = enumeration;
 		
 		this.stateArray = new int[Cell.getNumberOfStates()];
@@ -42,7 +49,7 @@ public class TransitionByEnumeration extends Transition
 			}
 		}
 
-		return true;
+		return super.getRandomChance();
 	}
 
 	private void buildAdjQuantitiesArray(Coord coord, Grid grid, Adjacency adj)
