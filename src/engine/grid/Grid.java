@@ -43,4 +43,30 @@ public class Grid extends ArrayList<Cell>
 			cell.click(selectedState);
 		}
 	}
+
+	public void rightClick(int selectedState, int x, int y) throws SlickException
+	{
+		Pair pair = Game.getGame().getRenderer().getCamera().transform(x, y);
+
+		Coord coord = new Coord(pair);
+		Cell cell = this.getCell(coord);
+
+		if(cell == null && selectedState != 0)
+		{
+			cell = new Cell(coord);
+			this.add(cell);
+		}
+
+		if (selectedState > 0)
+		{
+			if(cell.getState() != 0)
+			{
+				cell.click(0);
+			}
+		}
+		else if (selectedState == -1)
+		{
+			cell.click(-2);
+		}
+	}
 }

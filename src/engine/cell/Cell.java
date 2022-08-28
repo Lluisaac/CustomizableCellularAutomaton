@@ -93,12 +93,30 @@ public class Cell extends Element
 
 		Game.getGame().addToUpdateUrgently(this);
 	}
+	
+	public void rightClick()
+	{
+		if(this.state == 0)
+		{
+			this.setState(Cell.getNumberOfStates() - 1);
+		}
+		else
+		{
+			this.setState(this.state - 1);
+		}
+
+		Game.getGame().addToUpdateUrgently(this);
+	}
 
 	public void click(int selectedState)
 	{
 		if(selectedState == -1)
 		{
 			this.click();
+		}
+		else if(selectedState == -2)
+		{
+			this.rightClick();
 		}
 		else
 		{

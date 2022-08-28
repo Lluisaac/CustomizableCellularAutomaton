@@ -29,7 +29,7 @@ public class Game extends BasicGame
 
 	private static Game singleton;
 	private GameContainer container;
-	
+
 	public final JSONObject json;
 
 	private int overflow;
@@ -48,9 +48,9 @@ public class Game extends BasicGame
 	private int selectedState;
 
 	public Game(JSONObject json)
-	{		
+	{
 		super("Customizable Cellular Automaton");
-		
+
 		this.json = json;
 
 		this.overflow = 0;
@@ -130,11 +130,22 @@ public class Game extends BasicGame
 			@Override
 			public void mouseReleased(int button, int x, int y)
 			{
-				if(button == Input.MOUSE_LEFT_BUTTON)
+				if (button == Input.MOUSE_LEFT_BUTTON)
 				{
 					try
 					{
 						click(x, y);
+					}
+					catch(SlickException e)
+					{
+						e.printStackTrace();
+					}
+				}
+				else if (button == Input.MOUSE_RIGHT_BUTTON)
+				{
+					try
+					{
+						rightClick(x, y);
 					}
 					catch(SlickException e)
 					{
@@ -273,6 +284,23 @@ public class Game extends BasicGame
 		else
 		{
 			this.grid.click(this.selectedState, x, y);
+		}
+	}
+
+	protected void rightClick(int x, int y) throws SlickException
+	{
+		List<Element> possible = new ArrayList<Element>();
+		for(Element element : this.renderer.getMenu().getElements())
+		{
+			if(element.containsCoordinates(x, y))
+			{
+				possible.add(element);
+			}
+		}
+
+		if(possible.size() == 0)
+		{
+			this.grid.rightClick(this.selectedState, x, y);
 		}
 	}
 
