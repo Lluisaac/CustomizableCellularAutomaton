@@ -105,7 +105,14 @@ public class TransitionByEnumeration extends Transition
 			adjEnum.addStateAndQuantity(adjacency.getInt("state"), adjacency.getInt("quantity"));
 		}
 		
-		Transition.add(new TransitionByEnumeration(enumeration.getInt("initialState"), enumeration.getInt("resultingState"), adjEnum));
+		try
+		{			
+			Transition.add(new TransitionByEnumeration(enumeration.getInt("initialState"), enumeration.getInt("resultingState"), enumeration.getDouble("probability"), adjEnum));
+		}
+		catch (JSONException e)
+		{
+			Transition.add(new TransitionByEnumeration(enumeration.getInt("initialState"), enumeration.getInt("resultingState"), adjEnum));
+		}
 	}
 
 	private static Coord[] importAdjacencySubset(JSONObject enumeration)

@@ -3,6 +3,7 @@ package engine.cell.transition;
 import java.util.Map.Entry;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import engine.cell.adjacency.AdjacencyByExtension;
@@ -42,7 +43,7 @@ public class TransitionByExtension extends Transition
 						return false;
 					}
 				}
-				else if (entry.getValue() != 0)
+				else if(entry.getValue() != 0)
 				{
 					return false;
 				}
@@ -51,15 +52,15 @@ public class TransitionByExtension extends Transition
 
 		return super.getRandomChance();
 	}
-	
+
 	public static void importJsonTransitionExtension(JSONObject transition)
 	{
 		JSONArray arr = transition.getJSONArray("extension");
-		
+
 		for(int i = 0; i < arr.length(); i++)
 		{
 			JSONObject extension = arr.getJSONObject(i);
-			
+
 			TransitionByExtension.importExtension(extension);
 		}
 	}
@@ -67,16 +68,22 @@ public class TransitionByExtension extends Transition
 	private static void importExtension(JSONObject extension)
 	{
 		JSONArray statePositions = extension.getJSONArray("statePositions");
-		
+
 		AdjacencyByExtension adj = new AdjacencyByExtension();
-		
+
 		for(int j = 0; j < statePositions.length(); j++)
 		{
 			JSONObject adjacency = statePositions.getJSONObject(j);
-			
+
 			adj.addState(new Coord(adjacency.getInt("x"), adjacency.getInt("x")), adjacency.getInt("state"));
 		}
-		
-		Transition.add(new TransitionByExtension(extension.getInt("initialState"), extension.getInt("resultingState"), adj));
+		try
+		{
+			Transition.add(new TransitionByExtension(extension.getInt("initialState"), extension.getInt("resultingState"), extension.getDouble("probability"),adj));
+		}
+		catch(JSONException e)
+		{
+			Transition.add(new TransitionByExtension(extension.getInt("initialState"), extension.getInt("resultingState"), adj));
+		}
 	}
 }

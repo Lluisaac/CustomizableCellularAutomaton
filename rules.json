@@ -24,6 +24,16 @@
 			"red": 255,
 			"green": 0,
 			"blue": 0
+		},
+		{
+			"red": 255,
+			"green": 255,
+			"blue": 0
+		},
+		{
+			"red": 255,
+			"green": 128,
+			"blue": 0
 		}
 	],
 	"adjacency": [
@@ -181,6 +191,39 @@
 						"quantity": 8
 					}
 				]
+			},
+			{
+				"initialState": 0,
+				"resultingState": 6,
+				"probability": 0.66,
+				"stateQuantities": [
+					{
+						"state": 6,
+						"quantity": 1
+					},
+					{
+						"state": 7,
+						"quantity": 0
+					}
+				],
+				"adjacencySubset": [
+					{
+						"x": 0,
+						"y": 1
+					},
+					{
+						"x": 0,
+						"y": -1
+					},
+					{
+						"x": 1,
+						"y": 0
+					},
+					{
+						"x": -1,
+						"y": 0
+					}
+				]
 			}
 		],
 		"extension": [
@@ -209,6 +252,10 @@
 			{
 				"initialState": 4,
 				"resultingState": 3
+			},
+			{
+				"initialState": 6,
+				"resultingState": 7
 			}
 		]
 	} 

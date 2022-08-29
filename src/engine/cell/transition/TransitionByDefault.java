@@ -1,6 +1,7 @@
 package engine.cell.transition;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import engine.grid.Coord;
@@ -34,7 +35,14 @@ public class TransitionByDefault extends Transition
 		{
 			JSONObject defaultTrans = arr.getJSONObject(i);
 			
-			Transition.add(new TransitionByDefault(defaultTrans.getInt("initialState"), defaultTrans.getInt("resultingState")));
+			try
+			{
+				Transition.add(new TransitionByDefault(defaultTrans.getInt("initialState"), defaultTrans.getInt("resultingState"), defaultTrans.getDouble("probability")));
+			}
+			catch (JSONException e)
+			{
+				Transition.add(new TransitionByDefault(defaultTrans.getInt("initialState"), defaultTrans.getInt("resultingState")));
+			}
 		}
 	}
 }
