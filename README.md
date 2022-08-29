@@ -1,4 +1,3 @@
-
 # Customizable Cellular Automaton
 
 This is an engine that allows the customization and simulation of almost any cellular automaton.
@@ -10,7 +9,7 @@ Once the rules for the customized cellular automaton are written and the simulat
 You can use the WASD or the arrow keys to move around in the simulator. You can also zoom and unzoom with the mouse wheel.
 On the top right, there is a cross button to close the simulation (you can also press the escape key).
 On the bottom right, you can manipulate how many steps are to be simulated every second using the **-** and the **+** buttons (you can also press the same keys on your keyboard). You can also pause the game with the rightmost button (you can also press the space key).
-On the bottom left, the first button is used to centre the camera back to the origin point. By default, clicking anywhere on the simulation will change the state of the corresponding cell. Clicking the same cell will cycle the state of that cell. With the second button, you can set which state will be put by clicking on a cell or if the state should cycle.
+On the bottom left, the first button is used to centre the camera back to the origin point. By default, left-clicking anywhere on the simulation will change the state of the corresponding cell. Left-clicking the same cell will cycle the state of that cell. With the second button, you can set which state will be put by left-clicking on a cell or if the state should cycle. By right-clicking, the cycling will be done in reverse order. If a state is selected, right-clicking will put the default, black state.
 
 When the simulation is played, for every step, all existing cells will be checked. Every transition rule will check if it applies for every cell and if it does, it will tell the simulator what change should be made before the next step. There are no bounds for the simulation, except the performances of the computer it runs on.
 
@@ -50,9 +49,13 @@ Currently, there are three types of transition. Each will provide a way for a ce
 - In the "enumeration" array, if you want a custom neighbourhood, an element should have all the necessary things for a transition by enumeration. In addition, it should have an array named "adjacencySubset". In this array, every element should have two int values named "x" and "y", being the relative coordinates that make up the custom neighbourhood. These coordinates must be included within the neighbourhood.
 - Having the element ``{"initialState":0, "resultingState":1, "stateQuantities":[{"state":1, "quantity":1}],"adjacencySubset":[{"x":0, "y":1},{"x" 0, "y":-1}]}`` will change all black cells into the first custom state if there is exactly one cell in the first custom state in its custom neighbourhood. That custom neighbourhood is composed of the cell directly above and the cell directly below.
 
+#### Adding a probability
+A transition rule can be made into a probabilistic transition rule easily. In the corresponding element, add the float value "probability". This value is the probability of a transition rule applying if it already was coherent.
+Having the element ``{"initialState":0, "resultingState":1, "probability":0.2}`` will change all black cells into the first custom state with a probability of 1/5.
+
 ### The example
 The JSON file of the example can be found in the file named ``rules.json``.
-In this example, the cellular automaton has six different states. The neighbours of a cell are the adjacent cells, orthogonally and diagonally.
+In this example, the cellular automaton has several different states. The neighbours of a cell are the adjacent cells, orthogonally and diagonally.
 
 Here is the list of the states with explanations on how they interact:
 1. **Black**, it's the quiescent state, it does nothing when on its own. 
@@ -60,9 +63,13 @@ Here is the list of the states with explanations on how they interact:
 These rules are defined using eight different transitions by enumeration. The first one changes a black cell to white if exactly three of its neighbours are white. The seven other transitions change a white cell to black if 0, 1, 4, 5, 6, 7 or 8 of its neighbours are white.
 3. **Gray**, a black cell will become gray if a gray cell is directly below or above it.
 These rules are defined using two different transitions by enumeration, with the option of having a different neighbourhood. Both transitions change the neighbourhood to be the cells directly above and below. The first transition changes a black cell to gray if there is exactly one gray cell in its neighbourhood. The second changes a black cell to gray if there are exactly two gray cells in its neighbourhood.
-4. **Green**, a green cell will become a blue.
+4. **Green**, a green cell will become blue.
 This rule is defined using a transition by default. If a cell is green, the transition makes it blue.
-5. **Blue**, a blue cell will become a green.
+5. **Blue**, a blue cell will become green.
 This rule is defined using a transition by default. If a cell is blue, the transition makes it green.
 6. **Red**, a black cell will become red if there is a red cell on the top left of it and if there is a black cell on the top right of it.
 This rule is defined using a transition by extension. It does exactly what is described above.
+7. **Yellow**, a black cell will become yellow if a yellow cell is orthogonally adjacent.
+This rule is defined using a transition by enumeration with a different neighbourhood and a probability. The probability is of 2/3.
+8. **Orange**, a yellow cell will become orange.
+This rule is defined using a transition by default. If a cell is yellow, the transition makes it orange.
