@@ -19,17 +19,10 @@ public class TransitionByEnumeration extends Transition
 
 	public TransitionByEnumeration(int originalState, int resultingState, AdjacencyByEnumeration... enumeration)
 	{
-		this(originalState, resultingState, 1, enumeration);
-	}
+		super(originalState, resultingState);
 
-	public TransitionByEnumeration(int originalState, int resultingState, double probability, AdjacencyByEnumeration... enumeration)
-	{
-		this.originalState = originalState;
-		this.resultingState = resultingState;
-		this.probability = probability;
-		
 		this.enumeration = enumeration;
-		
+
 		this.stateArray = new int[Cell.getNumberOfStates()];
 	}
 
@@ -49,7 +42,7 @@ public class TransitionByEnumeration extends Transition
 			}
 		}
 
-		return super.getRandomChance();
+		return true;
 	}
 
 	private void buildAdjQuantitiesArray(Coord coord, Grid grid, Adjacency adj)
@@ -79,15 +72,15 @@ public class TransitionByEnumeration extends Transition
 			stateArray[i] = 0;
 		}
 	}
-	
+
 	public static void importJsonTransitionEnumeration(JSONObject transition)
 	{
 		JSONArray arr = transition.getJSONArray("enumeration");
-		
+
 		for(int i = 0; i < arr.length(); i++)
 		{
 			JSONObject enumeration = arr.getJSONObject(i);
-			
+
 			TransitionByEnumeration.importEnumeration(enumeration);
 		}
 	}
@@ -95,43 +88,37 @@ public class TransitionByEnumeration extends Transition
 	private static void importEnumeration(JSONObject enumeration)
 	{
 		JSONArray stateQuantities = enumeration.getJSONArray("stateQuantities");
-		
+
 		AdjacencyByEnumeration adjEnum = new AdjacencyByEnumeration(TransitionByEnumeration.importAdjacencySubset(enumeration));
-		
+
 		for(int j = 0; j < stateQuantities.length(); j++)
 		{
 			JSONObject adjacency = stateQuantities.getJSONObject(j);
-			
+
 			adjEnum.addStateAndQuantity(adjacency.getInt("state"), adjacency.getInt("quantity"));
 		}
-		
-		try
-		{			
-			Transition.add(new TransitionByEnumeration(enumeration.getInt("initialState"), enumeration.getInt("resultingState"), enumeration.getDouble("probability"), adjEnum));
-		}
-		catch (JSONException e)
-		{
-			Transition.add(new TransitionByEnumeration(enumeration.getInt("initialState"), enumeration.getInt("resultingState"), adjEnum));
-		}
+
+		Transition.add(new TransitionByEnumeration(enumeration.getInt("initialState"), enumeration.getInt("resultingState"), adjEnum));
+
 	}
 
 	private static Coord[] importAdjacencySubset(JSONObject enumeration)
-	{		
-		try 
+	{
+		try
 		{
 			JSONArray adjSubset = enumeration.getJSONArray("adjacencySubset");
 			Coord[] adjacencySubset = new Coord[adjSubset.length()];
-			
+
 			for(int j = 0; j < adjSubset.length(); j++)
 			{
 				JSONObject jsonCoords = adjSubset.getJSONObject(j);
 				adjacencySubset[j] = new Coord(jsonCoords.getInt("x"), jsonCoords.getInt("y"));
 			}
-			
+
 			return adjacencySubset;
 		}
-		catch (JSONException e)
-		{				
+		catch(JSONException e)
+		{
 			return Adjacency.getBasicAdjacency().toArray(new Coord[0]);
 		}
 	}

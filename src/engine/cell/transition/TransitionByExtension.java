@@ -3,7 +3,6 @@ package engine.cell.transition;
 import java.util.Map.Entry;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import engine.cell.adjacency.AdjacencyByExtension;
@@ -17,14 +16,7 @@ public class TransitionByExtension extends Transition
 
 	public TransitionByExtension(int originalState, int resultingState, AdjacencyByExtension... adjacentCells)
 	{
-		this(originalState, resultingState, 1, adjacentCells);
-	}
-
-	public TransitionByExtension(int originalState, int resultingState, double probability, AdjacencyByExtension... adjacentCells)
-	{
-		this.originalState = originalState;
-		this.resultingState = resultingState;
-		this.probability = probability;
+		super(originalState, resultingState);
 
 		this.adjacentCells = adjacentCells;
 	}
@@ -50,7 +42,7 @@ public class TransitionByExtension extends Transition
 			}
 		}
 
-		return super.getRandomChance();
+		return true;
 	}
 
 	public static void importJsonTransitionExtension(JSONObject transition)
@@ -77,13 +69,7 @@ public class TransitionByExtension extends Transition
 
 			adj.addState(new Coord(adjacency.getInt("x"), adjacency.getInt("x")), adjacency.getInt("state"));
 		}
-		try
-		{
-			Transition.add(new TransitionByExtension(extension.getInt("initialState"), extension.getInt("resultingState"), extension.getDouble("probability"),adj));
-		}
-		catch(JSONException e)
-		{
-			Transition.add(new TransitionByExtension(extension.getInt("initialState"), extension.getInt("resultingState"), adj));
-		}
+
+		Transition.add(new TransitionByExtension(extension.getInt("initialState"), extension.getInt("resultingState"), adj));
 	}
 }

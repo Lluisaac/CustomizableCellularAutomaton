@@ -2,15 +2,17 @@ package engine.cell.transition;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import org.json.JSONObject;
 
 import engine.Game;
 import engine.cell.Cell;
+import engine.cell.transition.probabilistic.ProbabilisticTransitionByDefault;
 import engine.grid.Coord;
 import engine.grid.Grid;
 import engine.util.Pair;
+import engine.util.probabilistic.Probability;
+import engine.util.probabilistic.ProbabilityArray;
 
 public abstract class Transition
 {
@@ -18,17 +20,17 @@ public abstract class Transition
 	private static List<Transition> allTransitions;
 	private static List<Pair> allSimplifiedTransitions;
 
-	private static Random rand = new Random();
-
 	protected int originalState;
 	protected int resultingState;
-	
-	protected double probability;
 
 	public static void init()
 	{
 		Transition.allTransitions = new ArrayList<Transition>();
 		Transition.allSimplifiedTransitions = new ArrayList<Pair>();
+		
+		ProbabilityArray probabilities = new ProbabilityArray(8, new Probability(3, 0.5));
+		ProbabilisticTransitionByDefault trans = new ProbabilisticTransitionByDefault(8, probabilities);
+		Transition.add(trans);
 		
 		Transition.importJsonTransition();
 	}
@@ -68,18 +70,12 @@ public abstract class Transition
 	{
 		return Transition.allSimplifiedTransitions;
 	}
+	
+	public Transition(int originalState, int resultingState)
+	{
+		this.originalState = originalState;
+		this.resultingState = resultingState;
+	}
 
 	public abstract boolean isTransitionAdmissible(Coord coord, Grid grille);
-
-	public boolean getRandomChance()
-	{
-		if (this.probability == 1)
-		{
-			return true;
-		}
-		else
-		{
-			return Transition.rand.nextDouble() <= this.probability;
-		}
-	}
 }
