@@ -1,4 +1,4 @@
-package engine.util.probabilistic;
+package engine.util.probabilities;
 
 import java.util.Random;
 

@@ -1,4 +1,4 @@
-package engine.util.probabilistic;
+package engine.util.probabilities;
 
 public class Probability
 {

@@ -16,7 +16,7 @@ import org.newdawn.slick.SlickException;
 
 import engine.cell.Cell;
 import engine.cell.adjacency.Adjacency;
-import engine.cell.transition.Transition;
+import engine.cell.transition.deterministic.Transition;
 import engine.grid.Coord;
 import engine.grid.Grid;
 import renderer.Camera;

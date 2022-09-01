@@ -1,4 +1,4 @@
-package engine.cell.transition;
+package engine.cell.transition.deterministic;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -121,6 +121,11 @@ public class TransitionByEnumeration extends Transition
 		{
 			return Adjacency.getBasicAdjacency().toArray(new Coord[0]);
 		}
+	}
+
+	public AdjacencyByEnumeration[] getAdjacencies()
+	{
+		return this.enumeration;
 	}
 
 }

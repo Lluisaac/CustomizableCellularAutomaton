@@ -1,4 +1,4 @@
-package engine.cell.transition;
+package engine.cell.transition.deterministic;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

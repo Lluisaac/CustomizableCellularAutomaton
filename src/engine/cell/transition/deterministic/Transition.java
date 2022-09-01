@@ -1,4 +1,4 @@
-package engine.cell.transition;
+package engine.cell.transition.deterministic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,12 +7,12 @@ import org.json.JSONObject;
 
 import engine.Game;
 import engine.cell.Cell;
-import engine.cell.transition.probabilistic.ProbabilisticTransitionByDefault;
+import engine.cell.transition.probabilistic.ProbabilisticTransition;
 import engine.grid.Coord;
 import engine.grid.Grid;
 import engine.util.Pair;
-import engine.util.probabilistic.Probability;
-import engine.util.probabilistic.ProbabilityArray;
+import engine.util.probabilities.Probability;
+import engine.util.probabilities.ProbabilityArray;
 
 public abstract class Transition
 {
@@ -29,7 +29,8 @@ public abstract class Transition
 		Transition.allSimplifiedTransitions = new ArrayList<Pair>();
 		
 		ProbabilityArray probabilities = new ProbabilityArray(8, new Probability(3, 0.5));
-		ProbabilisticTransitionByDefault trans = new ProbabilisticTransitionByDefault(8, probabilities);
+		TransitionByDefault transDefault = new TransitionByDefault(8, 8);
+		ProbabilisticTransition<TransitionByDefault> trans = new ProbabilisticTransition<TransitionByDefault>(transDefault, probabilities);
 		Transition.add(trans);
 		
 		Transition.importJsonTransition();
@@ -78,4 +79,9 @@ public abstract class Transition
 	}
 
 	public abstract boolean isTransitionAdmissible(Coord coord, Grid grille);
+	
+	public int getOriginalState()
+	{
+		return this.originalState;
+	}
 }

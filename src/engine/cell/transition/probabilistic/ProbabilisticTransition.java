@@ -1,15 +1,27 @@
 package engine.cell.transition.probabilistic;
 
-import engine.cell.transition.Transition;
-import engine.util.probabilistic.ProbabilityArray;
+import engine.cell.transition.deterministic.Transition;
+import engine.grid.Coord;
+import engine.grid.Grid;
+import engine.util.probabilities.ProbabilityArray;
 
-public abstract class ProbabilisticTransition extends Transition
+public class ProbabilisticTransition<T extends Transition> extends Transition
 {
 	protected ProbabilityArray probabilities;
+	private T transition;
 
-	public ProbabilisticTransition(int originalState, ProbabilityArray probabilities)
+	public ProbabilisticTransition(T transition, ProbabilityArray probabilites)
 	{
-		super(originalState, originalState);
-		this.probabilities = probabilities;
+		super(transition.getOriginalState(), transition.getOriginalState());
+		this.transition = transition;
+		this.probabilities = probabilites;
+	}
+
+	@Override
+	public boolean isTransitionAdmissible(Coord coord, Grid grid)
+	{
+		this.resultingState = this.probabilities.getRandomState();
+		
+		return this.resultingState != this.originalState && this.transition.isTransitionAdmissible(coord, grid);
 	}
 }

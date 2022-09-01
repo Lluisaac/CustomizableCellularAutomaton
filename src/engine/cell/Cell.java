@@ -11,7 +11,7 @@ import org.newdawn.slick.SlickException;
 import engine.Element;
 import engine.Game;
 import engine.cell.adjacency.Adjacency;
-import engine.cell.transition.Transition;
+import engine.cell.transition.deterministic.Transition;
 import engine.grid.Coord;
 import engine.util.CellImage;
 
