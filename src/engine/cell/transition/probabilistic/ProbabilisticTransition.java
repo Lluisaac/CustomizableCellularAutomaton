@@ -1,6 +1,6 @@
 package engine.cell.transition.probabilistic;
 
-import engine.cell.transition.deterministic.Transition;
+import engine.cell.transition.Transition;
 import engine.grid.Coord;
 import engine.grid.Grid;
 import engine.util.probabilities.ProbabilityArray;
@@ -21,7 +21,7 @@ public class ProbabilisticTransition<T extends Transition> extends Transition
 	public boolean isTransitionAdmissible(Coord coord, Grid grid)
 	{
 		this.resultingState = this.probabilities.getRandomState();
-		
+
 		return this.resultingState != this.originalState && this.transition.isTransitionAdmissible(coord, grid);
 	}
 }

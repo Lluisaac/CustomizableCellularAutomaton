@@ -1,13 +1,16 @@
-package engine.cell.transition.deterministic;
+package engine.cell.transition;
 
 import java.util.Map.Entry;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import engine.cell.adjacency.AdjacencyByExtension;
+import engine.cell.transition.probabilistic.ProbabilisticTransition;
 import engine.grid.Coord;
 import engine.grid.Grid;
+import engine.util.probabilities.ProbabilityArray;
 
 public class TransitionByExtension extends Transition
 {
@@ -70,6 +73,16 @@ public class TransitionByExtension extends Transition
 			adj.addState(new Coord(adjacency.getInt("x"), adjacency.getInt("x")), adjacency.getInt("state"));
 		}
 
-		Transition.add(new TransitionByExtension(extension.getInt("initialState"), extension.getInt("resultingState"), adj));
+		try
+		{
+			Transition.add(new TransitionByExtension(extension.getInt("initialState"), extension.getInt("resultingState"), adj));
+		}
+		catch(JSONException e)
+		{
+			TransitionByExtension trans = new TransitionByExtension(extension.getInt("initialState"), extension.getInt("initialState"), adj);
+			ProbabilityArray array = ProbabilityArray.importJSONProbabilityArray(extension.getInt("initialState"), extension.getJSONArray("probabilities"));
+
+			Transition.add(new ProbabilisticTransition<TransitionByExtension>(trans, array));
+		}
 	}
 }

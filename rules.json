@@ -34,6 +34,11 @@
 			"red": 255,
 			"green": 128,
 			"blue": 0
+		},
+		{
+			"red": 139,
+			"green": 0,
+			"blue": 139
 		}
 	],
 	"adjacency": [
@@ -194,8 +199,12 @@
 			},
 			{
 				"initialState": 0,
-				"resultingState": 6,
-				"probability": 0.66,
+				"probabilities": [
+					{
+						"resultingState": 6,
+						"probability": 0.66
+					}
+				],
 				"stateQuantities": [
 					{
 						"state": 6,
@@ -256,6 +265,19 @@
 			{
 				"initialState": 6,
 				"resultingState": 7
+			},
+			{
+				"initialState": 8,
+				"probabilities": [
+					{
+						"resultingState": 3,
+						"probability": 0.33
+					},
+					{
+						"resultingState": 7,
+						"probability": 0.33
+					}
+				]
 			}
 		]
 	} 

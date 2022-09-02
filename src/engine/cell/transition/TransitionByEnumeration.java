@@ -1,4 +1,4 @@
-package engine.cell.transition.deterministic;
+package engine.cell.transition;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -7,9 +7,11 @@ import org.json.JSONObject;
 import engine.cell.Cell;
 import engine.cell.adjacency.Adjacency;
 import engine.cell.adjacency.AdjacencyByEnumeration;
+import engine.cell.transition.probabilistic.ProbabilisticTransition;
 import engine.grid.Coord;
 import engine.grid.Grid;
 import engine.util.Pair;
+import engine.util.probabilities.ProbabilityArray;
 
 public class TransitionByEnumeration extends Transition
 {
@@ -98,8 +100,17 @@ public class TransitionByEnumeration extends Transition
 			adjEnum.addStateAndQuantity(adjacency.getInt("state"), adjacency.getInt("quantity"));
 		}
 
-		Transition.add(new TransitionByEnumeration(enumeration.getInt("initialState"), enumeration.getInt("resultingState"), adjEnum));
+		try
+		{
+			Transition.add(new TransitionByEnumeration(enumeration.getInt("initialState"), enumeration.getInt("resultingState"), adjEnum));
+		}
+		catch(JSONException e)
+		{
+			TransitionByEnumeration trans = new TransitionByEnumeration(enumeration.getInt("initialState"), enumeration.getInt("initialState"), adjEnum);
+			ProbabilityArray array = ProbabilityArray.importJSONProbabilityArray(enumeration.getInt("initialState"), enumeration.getJSONArray("probabilities"));
 
+			Transition.add(new ProbabilisticTransition<TransitionByEnumeration>(trans, array));
+		}
 	}
 
 	private static Coord[] importAdjacencySubset(JSONObject enumeration)

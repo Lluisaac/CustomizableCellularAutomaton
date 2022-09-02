@@ -1,4 +1,4 @@
-package engine.cell.transition.deterministic;
+package engine.cell.transition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,12 +7,9 @@ import org.json.JSONObject;
 
 import engine.Game;
 import engine.cell.Cell;
-import engine.cell.transition.probabilistic.ProbabilisticTransition;
 import engine.grid.Coord;
 import engine.grid.Grid;
 import engine.util.Pair;
-import engine.util.probabilities.Probability;
-import engine.util.probabilities.ProbabilityArray;
 
 public abstract class Transition
 {
@@ -27,11 +24,6 @@ public abstract class Transition
 	{
 		Transition.allTransitions = new ArrayList<Transition>();
 		Transition.allSimplifiedTransitions = new ArrayList<Pair>();
-		
-		ProbabilityArray probabilities = new ProbabilityArray(8, new Probability(3, 0.5));
-		TransitionByDefault transDefault = new TransitionByDefault(8, 8);
-		ProbabilisticTransition<TransitionByDefault> trans = new ProbabilisticTransition<TransitionByDefault>(transDefault, probabilities);
-		Transition.add(trans);
 		
 		Transition.importJsonTransition();
 	}
