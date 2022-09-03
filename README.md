@@ -1,3 +1,4 @@
+
 # Customizable Cellular Automaton
 
 This is an engine that allows the customization and simulation of almost any cellular automaton.
@@ -50,8 +51,9 @@ Currently, there are three types of transition. Each will provide a way for a ce
 - Having the element ``{"initialState":0, "resultingState":1, "stateQuantities":[{"state":1, "quantity":1}],"adjacencySubset":[{"x":0, "y":1},{"x" 0, "y":-1}]}`` will change all black cells into the first custom state if there is exactly one cell in the first custom state in its custom neighbourhood. That custom neighbourhood is composed of the cell directly above and the cell directly below.
 
 #### Adding a probability
-A transition rule can be made into a probabilistic transition rule easily. In the corresponding element, add the float value "probability". This value is the probability of a transition rule applying if it already was coherent.
-Having the element ``{"initialState":0, "resultingState":1, "probability":0.2}`` will change all black cells into the first custom state with a probability of 1/5.
+- A transition rule can be made into a probabilistic transition rule easily. In the corresponding element, remove the "resultingState" value and add a "probabilities" array. In this array, every element should have an integer value, "resultingState" and a floating value, "probability". These values represent the state in which the value must change and the probability of doing so. In the array, the sum of all values "probability" inside each element should sum to a value less or equal to one.
+- In a probabilistic transition, if the transition rule is coherent, the simulator is going to choose a random state and change the cell to it. If the sum of all probabilities for a transition rule is inferior to one, the chosen state may be the state that cell is already in, meaning that the transition rule won't apply.
+- Having the element ``{"initialState":0,"probabilities": [{"resultingState":1,"probability":0.25},{"resultingState":2,"probability":0.25}]}`` will change all black cells into the first custom state with a probability of 1/4, and into the second custom state with a probability of 1/4. It will do nothing with a probability of 1/2.
 
 ### The example
 The JSON file of the example can be found in the file named ``rules.json``.
