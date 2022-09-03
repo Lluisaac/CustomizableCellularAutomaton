@@ -75,3 +75,5 @@ This rule is defined using a transition by extension. It does exactly what is de
 This rule is defined using a transition by enumeration with a different neighbourhood and a probability. The probability is of 2/3.
 8. **Orange**, a yellow cell will become orange.
 This rule is defined using a transition by default. If a cell is yellow, the transition makes it orange.
+9. **Purple**, a purple cell will become orange with a probability of 1/3, cyan with a probability of 1/3 and stay the same with a probability of 1/3.
+This rule is defined using a transition by default with a different probability. 
