@@ -1,5 +1,6 @@
 package renderer;
 
+import java.awt.Toolkit;
 import java.util.List;
 
 import org.newdawn.slick.Graphics;
@@ -11,8 +12,8 @@ import engine.grid.Grid;
 public class Renderer
 {
 
-	public static final int GAME_HEIGHT = 1080;
-	public static final int GAME_WIDTH = 1920;
+	public static final int GAME_HEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+	public static final int GAME_WIDTH = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 
 	private Camera cam;
 	private Menu menu;
